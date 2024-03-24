@@ -1,7 +1,7 @@
-// import {VideoDBType} from '.video-db-type'
+import { OutputVideoType } from "./video-db-type"
 
 export type DBType = {
-  videos: any[] // VideoDBType[]
+  videos: OutputVideoType[]
   // some: any[]
 }
 
