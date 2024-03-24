@@ -3,11 +3,14 @@ import { SETTINGS } from '../src/settings'
 import { db, setDB } from '../src/db/db'
 import { dataset1, dataset2 } from './dataset'
 import { InputVideoType, ResolutionsEnum } from '../src/db/video-db-type'
+import { createVideoValidator } from '../src/videos/controllers/createVideoController'
 
 describe('/videos', () => {
   beforeAll(async () => {
     // awair req.delete('/testing/all-data')
   })
+
+  // --- GET --- //
 
   it('get /videos', async () => {
     setDB(dataset1);
@@ -28,12 +31,14 @@ describe('/videos', () => {
       .get(`${SETTINGS.PATH.VIDEOS}/23`)
       .expect(200)
 
-    console.log('------------', res.body)
+    // console.log('------------', res.body)
 
     expect(res.body.id).toBe(setId)
     //expect(res.body[0]).toEqual(dataset1.videos[0])
   })
 })
+
+// ---- POST --- //
 
 it('should create', async () => {
   setDB()
@@ -52,7 +57,8 @@ it('should create', async () => {
   expect(db.videos[0].title).toEqual('new video1')
   expect(res.body.availableResolutions).toEqual(newVideo.availableResolutions)
 })
-it('ERORR should create', async () => {
+
+it('ERORR while video create in availableResolutions incorrect values', async () => {
   setDB()
   const newVideo: any = {
     title: 'new video1',
@@ -60,23 +66,33 @@ it('ERORR should create', async () => {
     availableResolutions: ['asd']
   }
 
+  const error = createVideoValidator(newVideo); 
+
   const res = await req
     .post(SETTINGS.PATH.VIDEOS)
-    .send(newVideo) // отправка данных
+    .send(createVideoValidator(newVideo)) // отправка данных
     .expect(400)
 
-  console.log();
-  
+  expect(error.errorsMessages.length).toBe(1)
+  expect(error.errorsMessages[0].message).toEqual('incorrect values asd')
+})
+
+// --- DELETE --- //
+it('delete video by Id', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+
+  console.log('before => ', db.videos);
+
+  const res = await req
+    .delete(`SETTINGS.PATH.VIDEOS/${setId}`)
+    .expect(204)
+
+console.log('after => ', db.videos);
+  console.log('+++++++++   ', res.status);
 
   expect(db.videos.length).toBe(1)
-  expect(db.videos[0].title).toEqual('new video1')
-  expect(res.body.availableResolutions).toEqual(newVideo.availableResolutions)
 })
-// ...
-// it('shouldn\'t find', async () => {
-//     setDB(dataset1)
-//
-//     const res = await req
-//         .get(PATH.VIDEOS + '/1')
-//         .expect(404) // проверка на ошибку
-// ...

@@ -37,7 +37,7 @@ const createNewVideo = (videoData: InputVideoType): OutputVideoType => {
   }
 }
 
-const createVideoValidator = (videoData: InputVideoType): ErrorType => {
+export const createVideoValidator = (videoData: InputVideoType): ErrorType => {
   const error: ErrorType = {
     errorsMessages: []
   }

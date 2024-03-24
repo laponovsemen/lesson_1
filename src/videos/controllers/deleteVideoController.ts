@@ -3,22 +3,21 @@ import { db, setDB } from '../../db/db'
 import { OutputVideoType } from '../../db/video-db-type'
 
 type ParamsType = {
-  id: string // 
+  id: string
 }
 
 type ReqQueryType = string //? строка ?
 
 export const deleteVideoController = (req: Request<ParamsType, any, ReqQueryType>, res: Response<OutputVideoType>) => {
   if (req.params.id) {
-    const filteredVideos = db.videos.filter((video) => video.id === +req.params.id)
+    const filteredVideos = db.videos.filter((video) => video.id !== +req.params.id)
   
     setDB({videos: filteredVideos})
   
     res
-      .status(200)
-
+      .sendStatus(204)
   } else {
     res
-      .status(400)
+      .sendStatus(404)
   }
 }
