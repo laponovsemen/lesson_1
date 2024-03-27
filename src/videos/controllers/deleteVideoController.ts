@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import { db, setDB } from '../../db/db'
-import { OutputVideoType } from '../../db/video-db-type'
+import { OutputVideoType } from '../types/videos-types'
 
 type ParamsType = {
   id: string
 }
 
-type ReqQueryType = string //? строка ?
+type ReqQueryType = string
 
 export const deleteVideoController = (req: Request<ParamsType, any, ReqQueryType>, res: Response<OutputVideoType>) => {
   if (req.params.id) {

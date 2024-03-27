@@ -1,5 +1,6 @@
-import { ResolutionsEnum, OutputVideoType } from '../src/db/video-db-type'
 import {DBType} from '../src/db/db'
+import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
+import { OutputVideoType } from '../src/videos/types/videos-types'
 
 export const video1: OutputVideoType= {
   id: Date.now() + Math.random(),

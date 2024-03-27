@@ -1,11 +1,13 @@
 import { Request, Response } from 'express'
 import { db } from '../../db/db'
-import { InputVideoType, OutputVideoType, ResolutionsEnum } from '../../db/video-db-type';
 import { ErrorType } from '../../types/errorType';
+import { InputForCreateVideoType, OutputVideoType } from '../types/videos-types';
+import { videoValidator } from '../../validators/validators';
+import { TypeRequestEnum } from '../enums/videos-enum';
 
 type ResBodyType = OutputVideoType | ErrorType
 
-export const createVideoController = (req: Request<any, any, InputVideoType>, res: Response<ResBodyType>) => {
+export const createVideoController = (req: Request<any, any, InputForCreateVideoType>, res: Response<ResBodyType>) => {
   const inputVideo = req.body;
   const isRequerFields = inputVideo.title
     && inputVideo.availableResolutions.length > 0
@@ -20,11 +22,11 @@ export const createVideoController = (req: Request<any, any, InputVideoType>, re
   } else {
     res
       .status(400)
-      .json(createVideoValidator(inputVideo))
+      .json(videoValidator(TypeRequestEnum.createVideo, inputVideo))
   }
 }
 
-const createNewVideo = (videoData: InputVideoType): OutputVideoType => {
+const createNewVideo = (videoData: InputForCreateVideoType): OutputVideoType => {
   return {
     id: Date.now() + Math.random(),
     title: videoData.title,
@@ -37,48 +39,46 @@ const createNewVideo = (videoData: InputVideoType): OutputVideoType => {
   }
 }
 
-export const createVideoValidator = (videoData: InputVideoType): ErrorType => {
-  const error: ErrorType = {
-    errorsMessages: []
-  }
+// export const createVideoValidator = (videoData: InputForCreateVideoType): ErrorType => {
+  // const error: ErrorType = {
+  //   errorsMessages: []
+  // }
 
-  const availableResolutionsValid = (resolutions: ResolutionsEnum[]): string[] => {
-    const strictValues = Object.values(ResolutionsEnum)
-    const FindedErrorValues = resolutions.filter((resolution) => !strictValues.includes(resolution))
-    return FindedErrorValues
-  }
 
-  if (!videoData.title) {
-    error.errorsMessages.push({ field: 'title', message: 'video title missing' })
-  } else {
-    if (typeof videoData.title !== 'string') {
-      error.errorsMessages.push({ field: 'title', message: 'video title should be string' })
-    }
-  }
 
-  if (!videoData.author) {
-    error.errorsMessages.push({ field: 'author', message: 'video author missing' })
-  } else {
-    if (typeof videoData.author !== 'string') {
-      error.errorsMessages.push(
-        { field: 'author', message: 'video author should be string' }
-      )
-    }
-  }
+  // videoTitleValid(videoData.title)
 
-  if (!videoData.availableResolutions) {
-    error.errorsMessages.push({ field: 'availableResolutions', message: 'video availableResolutions missing' })
-  } else {
-    if (videoData.availableResolutions.length < 1) {
-      error.errorsMessages.push({field: 'availableResolutions', message: "video availableResolutions don't empty"})
-    } else if (videoData.availableResolutions.length > 0) {
-      const incorrectValues = availableResolutionsValid(videoData.availableResolutions)
+  // if (!videoData.title) {
+  //   error.errorsMessages.push({ field: 'title', message: 'video title missing' })
+  // } else {
+  //   if (typeof videoData.title !== 'string') {
+  //     error.errorsMessages.push({ field: 'title', message: 'video title should be string' })
+  //   }
+  // }
 
-      if(incorrectValues.length > 0) {
-        error.errorsMessages.push({field: 'availableResolutions', message: `incorrect values ${incorrectValues.join(', ')}`})
-      }
-    }
-  }
+  // if (!videoData.author) {
+  //   error.errorsMessages.push({ field: 'author', message: 'video author missing' })
+  // } else {
+  //   if (typeof videoData.author !== 'string') {
+  //     error.errorsMessages.push(
+  //       { field: 'author', message: 'video author should be string' }
+  //     )
+  //   }
+  // }
 
-  return error
-}
+  // if (!videoData.availableResolutions) {
+  //   error.errorsMessages.push({ field: 'availableResolutions', message: 'video availableResolutions missing' })
+  // } else {
+  //   if (videoData.availableResolutions.length < 1) {
+  //     error.errorsMessages.push({field: 'availableResolutions', message: "video availableResolutions don't empty"})
+  //   } else if (videoData.availableResolutions.length > 0) {
+  //     const incorrectValues = availableResolutionsValid(videoData.availableResolutions)
+
+  //     if(incorrectValues.length > 0) {
+  //       error.errorsMessages.push({field: 'availableResolutions', message: `incorrect values ${incorrectValues.join(', ')}`})
+  //     }
+  //   }
+  // }
+
+//   return error
+// }

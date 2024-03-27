@@ -2,8 +2,9 @@ import { req } from './test-helpers'
 import { SETTINGS } from '../src/settings'
 import { db, setDB } from '../src/db/db'
 import { dataset1, dataset2 } from './dataset'
-import { InputVideoType, ResolutionsEnum } from '../src/db/video-db-type'
-import { createVideoValidator } from '../src/videos/controllers/createVideoController'
+import { ResolutionsEnum, TypeRequestEnum } from '../src/videos/enums/videos-enum'
+import { InputForCreateVideoType } from '../src/videos/types/videos-types'
+import { videoValidator } from '../src/validators/validators'
 
 describe('/videos', () => {
   beforeAll(async () => {
@@ -28,7 +29,7 @@ describe('/videos', () => {
     setDB(dataWithVideoId);
 
     const res = await req
-      .get(`${SETTINGS.PATH.VIDEOS}/23`)
+      .get(`${SETTINGS.PATH.VIDEOS}/${setId}`)
       .expect(200)
 
     // console.log('------------', res.body)
@@ -42,7 +43,7 @@ describe('/videos', () => {
 
 it('should create', async () => {
   setDB()
-  const newVideo: InputVideoType = {
+  const newVideo: InputForCreateVideoType = {
     title: 'new video1',
     author: 'other',
     availableResolutions: [ResolutionsEnum.P144]
@@ -66,11 +67,11 @@ it('ERORR while video create in availableResolutions incorrect values', async ()
     availableResolutions: ['asd']
   }
 
-  const error = createVideoValidator(newVideo); 
+  const error = videoValidator(TypeRequestEnum.createVideo, newVideo); 
 
   const res = await req
     .post(SETTINGS.PATH.VIDEOS)
-    .send(createVideoValidator(newVideo)) // отправка данных
+    .send(videoValidator(TypeRequestEnum.createVideo, newVideo)) // отправка данных
     .expect(400)
 
   expect(error.errorsMessages.length).toBe(1)
@@ -78,6 +79,26 @@ it('ERORR while video create in availableResolutions incorrect values', async ()
 })
 
 // --- DELETE --- //
+it('delete video by Id', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+
+  console.log('before => ', db.videos);
+
+  const res = await req
+    .delete(`SETTINGS.PATH.VIDEOS/${setId}`)
+    .expect(204)
+
+console.log('after => ', db.videos);
+  console.log('+++++++++   ', res.status);
+
+  expect(db.videos.length).toBe(1)
+})
+
+// --- PUT --- //
 it('delete video by Id', async () => {
   setDB();
   setDB(dataset1);
