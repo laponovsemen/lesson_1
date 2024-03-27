@@ -43,7 +43,11 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: InputFor
         error.errorsMessages.push({field: 'availableResolutions', message: `incorrect values ${incorrectValues.join(', ')}`})
       }
     }
+
+  if (!videoData.minAgeRestriction) {
   }
+  }
+
   return error
 }
 

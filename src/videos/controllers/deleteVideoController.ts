@@ -9,6 +9,8 @@ type ParamsType = {
 type ReqQueryType = string
 
 export const deleteVideoController = (req: Request<ParamsType, any, ReqQueryType>, res: Response<OutputVideoType>) => {
+  console.log('ky');
+  
   if (req.params.id) {
     const filteredVideos = db.videos.filter((video) => video.id !== +req.params.id)
   

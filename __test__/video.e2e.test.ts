@@ -89,7 +89,7 @@ it('delete video by Id', async () => {
   console.log('before => ', db.videos);
 
   const res = await req
-    .delete(`SETTINGS.PATH.VIDEOS/${setId}`)
+    .delete(`/${SETTINGS.PATH.VIDEOS}/${setId}`)
     .expect(204)
 
 console.log('after => ', db.videos);
@@ -99,21 +99,21 @@ console.log('after => ', db.videos);
 })
 
 // --- PUT --- //
-it('delete video by Id', async () => {
-  setDB();
-  setDB(dataset1);
-  const setId = 23
-  const dataWithVideoId = dataset2(setId)
-  setDB(dataWithVideoId);
+// it('delete video by Id', async () => {
+//   setDB();
+//   setDB(dataset1);
+//   const setId = 23
+//   const dataWithVideoId = dataset2(setId)
+//   setDB(dataWithVideoId);
 
-  console.log('before => ', db.videos);
+//   console.log('before => ', db.videos);
 
-  const res = await req
-    .delete(`SETTINGS.PATH.VIDEOS/${setId}`)
-    .expect(204)
+//   const res = await req
+//     .delete(`SETTINGS.PATH.VIDEOS/${setId}`)
+//     .expect(204)
 
-console.log('after => ', db.videos);
-  console.log('+++++++++   ', res.status);
+// console.log('after => ', db.videos);
+//   console.log('+++++++++   ', res.status);
 
-  expect(db.videos.length).toBe(1)
-})
+//   expect(db.videos.length).toBe(1)
+// })

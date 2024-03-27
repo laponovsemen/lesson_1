@@ -17,10 +17,10 @@ export const findVideoController = (req: Request<ParamsType, any, ReqQueryType>,
         .json(findVideoById)
     } else {
       res
-        .status(404)
+        .sendStatus(404)
     }
   } else {
     res
-      .status(400)
+      .sendStatus(400)
   }
 }
