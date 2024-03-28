@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { db, setDB } from '../../db/db'
-import { InputForUpdateVideoType, OutputVideoType } from '../types/videos-types';
-import { ErrorType } from '../../types/errorType';
+import { OutputVideoType } from '../types/videos-types';
 import { videoValidator } from '../../validators/validators';
 import { TypeRequestEnum } from '../enums/videos-enum';
 
@@ -17,15 +16,15 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
   let isUpdateVideo = false
 
   if (isRequerFields && req.params.id) {
-    setDB({
-      videos: db.videos.map((video) => {
-        if (video.id === +req.params.id) {
-          isUpdateVideo = true
-          return inputVideo
-        }
-        return video
-      })
+    const updatedVideos = db.videos.map((video) => {
+      if (video.id === +req.params.id) {
+        isUpdateVideo = true
+        return inputVideo
+      }
+      return video
     })
+    setDB({videos: updatedVideos})
+
     if (isUpdateVideo) {
       res
         .status(201)

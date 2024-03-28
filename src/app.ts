@@ -10,7 +10,7 @@ app.use(express.json())
 app.get('/', (req: Request, res: Response) => {
     res.status(200).send('Hello back-end HomeWorks in it-incubator!!!')
 })
-app.delete('hometask_01/api/testing/all-data', (req: Request, res: Response) => {
+app.delete('/testing/all-data', (req: Request, res: Response) => {
     setDB();
     res.sendStatus(204)
 })
