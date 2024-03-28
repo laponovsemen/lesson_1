@@ -31,7 +31,7 @@ const createNewVideo = (videoData: InputForCreateVideoType): OutputVideoType => 
     id: Math.trunc(Date.now() + Math.random()),
     title: videoData.title,
     author: videoData.author,
-    canBeDownloaded: true,
+    canBeDownloaded: false,
     minAgeRestriction: null,
     createdAt: new Date().toISOString(),
     publicationDate: new Date().toISOString(),
