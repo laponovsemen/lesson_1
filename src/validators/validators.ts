@@ -14,6 +14,8 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
   } else {
     if (typeof videoData.title !== 'string') {
       error.errorsMessages.push({ field: 'title', message: 'video title should be string' })
+    } else if (videoData.title.length > 40) {
+      error.errorsMessages.push({ field: 'title', message: 'video title max length = 40' })
     }
   }
 
@@ -26,6 +28,8 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
       error.errorsMessages.push(
         { field: 'author', message: 'video author should be string' }
       )
+    } else if (videoData.title.length > 20) {
+      error.errorsMessages.push({ field: 'author', message: 'video author max length = 20' })
     }
   }
   
