@@ -8,7 +8,7 @@ import { videoValidator } from '../src/validators/validators'
 
 describe('/videos', () => {
   beforeAll(async () => {
-    // awair req.delete('/testing/all-data')
+    await req.delete('/testing/all-data')
   })
 
   // --- GET --- //
@@ -46,11 +46,11 @@ it('should create', async () => {
 
   const res = await req
     .post(SETTINGS.PATH.VIDEOS)
-    .send(newVideo) // отправка данных
+    .send(newVideo)
     .expect(201)
 
   expect(db.videos.length).toBe(1)
-  expect(db.videos[0].title).toEqual('new video1')
+  expect(res.body.title).toEqual('new video1')
   expect(res.body.availableResolutions).toEqual(newVideo.availableResolutions)
 })
 
@@ -64,7 +64,7 @@ it('ERORR while video create in availableResolutions incorrect values', async ()
 
   const res = await req
     .post(SETTINGS.PATH.VIDEOS)
-    .send( newVideo) // отправка данных
+    .send(newVideo)
     .expect(400)
 
   expect(res.body.errorsMessages.length).toBe(1)
@@ -153,4 +153,24 @@ it('update video by Id', async () => {
 
   expect(db.videos.length).toBe(2)
   expect(res.body.title).toEqual(cangedTitle)
+})
+//
+it('ERROR file type shoul be boolean', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+  
+  const canBeDownloaded = 'string'
+  const cangedTitle = 'my new title'
+  const changedVideo = video1(setId, cangedTitle, canBeDownloaded)
+  
+  const res = await req
+    .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
+    .send(changedVideo)
+    .expect(400)
+
+    expect(res.body.errorsMessages.length).toBe(1)
+    expect(res.body.errorsMessages[0].message).toEqual('video canBeDownloaded type shoul be boolean')
 })

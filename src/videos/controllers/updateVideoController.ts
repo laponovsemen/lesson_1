@@ -12,10 +12,10 @@ type ResBodyType = OutputVideoType
 export const updateVideoController = (req: Request<ParamsType, any, OutputVideoType>, res: Response<any>) => {
 
   const inputVideo = req.body;
-  const isRequerFields = !!(inputVideo.availableResolutions && inputVideo.title && inputVideo.author && inputVideo.minAgeRestriction && inputVideo.publicationDate && inputVideo.canBeDownloaded)
+  const error = videoValidator(TypeRequestEnum.updateVideo, inputVideo)
   let isUpdateVideo = false
 
-  if (isRequerFields && req.params.id) {
+  if (error.errorsMessages.length === 0 && req.params.id) {
     const updatedVideos = db.videos.map((video) => {
       if (video.id === +req.params.id) {
         isUpdateVideo = true
@@ -36,6 +36,6 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
   } else {
     res
       .status(400)
-      .json(videoValidator(TypeRequestEnum.updateVideo, inputVideo))
+      .json(error)
   }
 }
