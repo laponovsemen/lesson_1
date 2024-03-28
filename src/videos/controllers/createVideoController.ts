@@ -28,7 +28,7 @@ export const createVideoController = (req: Request<any, any, InputForCreateVideo
 
 const createNewVideo = (videoData: InputForCreateVideoType): OutputVideoType => {
   return {
-    id: Date.now() + Math.random(),
+    id: Math.trunc(Date.now() + Math.random()),
     title: videoData.title,
     author: videoData.author,
     canBeDownloaded: true,
