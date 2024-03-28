@@ -3,14 +3,14 @@
   "name": "lesson_1",
   "builds": [
     {
-      "src": "index.ts",
+      "src": "src/index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dist": "/index.js"
+      "dest": "src/index.ts"
     }
   ]
 }
