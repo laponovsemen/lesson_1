@@ -12,7 +12,7 @@ export const createVideoController = (req: Request<any, any, InputForCreateVideo
   const inputVideo = req.body;
   const error = videoValidator(TypeRequestEnum.createVideo, inputVideo)
 
-  if (!error.errorsMessages.length) {
+  if (error.errorsMessages.length === 0) {
     const newVideo = createNewVideo(inputVideo)
     db.videos.push(newVideo)
     res

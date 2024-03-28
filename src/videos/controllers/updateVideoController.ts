@@ -3,13 +3,14 @@ import { db, setDB } from '../../db/db'
 import { OutputVideoType } from '../types/videos-types';
 import { videoValidator } from '../../validators/validators';
 import { TypeRequestEnum } from '../enums/videos-enum';
+import { ErrorType } from '../../types/errorType';
 
 type ParamsType = {
   id: string
 }
 type ResBodyType = OutputVideoType
 
-export const updateVideoController = (req: Request<ParamsType, any, OutputVideoType>, res: Response<any>) => {
+export const updateVideoController = (req: Request<ParamsType, any, OutputVideoType>, res: Response<ResBodyType | ErrorType>) => {
 
   const inputVideo = req.body;
   const error = videoValidator(TypeRequestEnum.updateVideo, inputVideo)

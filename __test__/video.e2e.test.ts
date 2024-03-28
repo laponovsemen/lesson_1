@@ -23,15 +23,18 @@ describe('/videos', () => {
   })
   //
   it('get by id /videos/id', async () => {
+    setDB();
     const setId = 23
-    const dataWithVideoId = dataset2(setId)
-    setDB(dataWithVideoId);
+    const videoWithId = video1(setId)
+    setDB({ videos: [videoWithId] });
 
     const res = await req
       .get(`${SETTINGS.PATH.VIDEOS}/${setId}`)
       .expect(200)
 
-    expect(res.body.id).toBe(setId)
+    expect(res.body.id).toBe(videoWithId.id)
+    expect(db.videos.length).toBe(1)
+    expect(db.videos[0]).toEqual(videoWithId)
   })
 })
 
@@ -54,6 +57,7 @@ it('should create', async () => {
   expect(res.body.availableResolutions).toEqual(newVideo.availableResolutions)
 })
 
+//
 it('ERORR while video create in availableResolutions incorrect values', async () => {
   setDB()
   const newVideo: any = {
@@ -140,12 +144,11 @@ it('update video by Id', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId)
+  const dataWithVideoId = dataset2(setId, 'title', 3)
   setDB(dataWithVideoId);
-  
+
   const cangedTitle = 'my new title'
-  const changedVideo = video1(setId, cangedTitle)
-  
+  const changedVideo = video1(setId, cangedTitle, false, 5)
   const res = await req
     .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
     .send(changedVideo)
@@ -154,6 +157,7 @@ it('update video by Id', async () => {
   expect(db.videos.length).toBe(2)
   expect(res.body.title).toEqual(cangedTitle)
 })
+
 //
 it('ERROR file type shoul be boolean', async () => {
   setDB();
@@ -161,16 +165,58 @@ it('ERROR file type shoul be boolean', async () => {
   const setId = 23
   const dataWithVideoId = dataset2(setId)
   setDB(dataWithVideoId);
-  
+
   const canBeDownloaded = 'string'
   const cangedTitle = 'my new title'
-  const changedVideo = video1(setId, cangedTitle, canBeDownloaded)
-  
+  const changedVideo = video1(setId, cangedTitle, canBeDownloaded, 5)
+
   const res = await req
     .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
     .send(changedVideo)
     .expect(400)
 
-    expect(res.body.errorsMessages.length).toBe(1)
-    expect(res.body.errorsMessages[0].message).toEqual('video canBeDownloaded type shoul be boolean')
+  expect(res.body.errorsMessages.length).toBe(1)
+  expect(res.body.errorsMessages[0].message).toEqual('video canBeDownloaded type shoul be boolean')
+})
+
+//
+it('ERROR minAgeRestriction max 18', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+
+  const minAgeRestriction = 19
+  const cangedTitle = 'my new title'
+  const changedVideo = video1(setId, cangedTitle, false, minAgeRestriction)
+
+  const res = await req
+    .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
+    .send(changedVideo)
+    .expect(400)
+
+  expect(res.body.errorsMessages.length).toBe(1)
+  expect(res.body.errorsMessages[0].message).toEqual('video minAgeRestriction max 18')
+})
+
+//
+it('ERROR minAgeRestriction min 1', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+
+  const minAgeRestriction = 0
+  const cangedTitle = 'my new title'
+  const changedVideo = video1(setId, cangedTitle, false, minAgeRestriction)
+
+  const res = await req
+    .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
+    .send(changedVideo)
+    .expect(400)
+
+  expect(res.body.errorsMessages.length).toBe(1)
+  expect(res.body.errorsMessages[0].message).toEqual('video minAgeRestriction min 1')
 })

@@ -48,9 +48,15 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
       }
     }
 
-  // if (!videoData.minAgeRestriction && typeRequest === TypeRequestEnum.updateVideo) {
-  //   error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction missing' })
-  // }
+  if (videoData.minAgeRestriction === null && typeRequest === TypeRequestEnum.updateVideo) {
+    error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction missing' })
+  } else if(typeRequest === TypeRequestEnum.updateVideo) {
+    if( videoData.minAgeRestriction > 18) {
+      error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction max 18' })
+    } else if (videoData.minAgeRestriction < 1)
+      error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction min 1' })
+  }
+
   if ((videoData.canBeDownloaded === null || typeof videoData.canBeDownloaded === 'number') && typeRequest === TypeRequestEnum.updateVideo) {
     error.errorsMessages.push({ field: 'canBeDownloaded', message: 'video canBeDownloaded missing' })
   } else if(typeRequest === TypeRequestEnum.updateVideo) {
@@ -59,6 +65,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
 
     }
   }
+
   if (!videoData.publicationDate && typeRequest === TypeRequestEnum.updateVideo) {
     error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate missing' })
   }
