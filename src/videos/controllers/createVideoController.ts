@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import moment from 'moment';
 import { db } from '../../db/db'
 import { ErrorType } from '../../types/errorType';
 import { InputForCreateVideoType, OutputVideoType } from '../types/videos-types';
@@ -34,7 +35,7 @@ const createNewVideo = (videoData: InputForCreateVideoType): OutputVideoType => 
     canBeDownloaded: false,
     minAgeRestriction: null,
     createdAt: new Date().toISOString(),
-    publicationDate: new Date().toISOString(),
+    publicationDate: moment(new Date()).add(1, 'day').toISOString(),
     availableResolutions: videoData.availableResolutions,
   }
 }

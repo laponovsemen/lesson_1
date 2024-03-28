@@ -88,6 +88,20 @@ it('delete video by Id', async () => {
   expect(db.videos.length).toBe(1)
   expect(db.videos[0].id).not.toBe(setId)
 })
+//
+it('ERROR find by Id', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+
+  const res = await req
+    .delete(`${SETTINGS.PATH.VIDEOS}/${4052}`)
+    .expect(404)
+
+  expect(res.statusCode).toBe(404)
+})
 
 // --- PUT --- //
 it('update video by Id', async () => {
