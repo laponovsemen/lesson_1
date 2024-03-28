@@ -12,7 +12,6 @@ describe('/videos', () => {
   })
 
   // --- GET --- //
-
   it('get /videos', async () => {
     setDB(dataset1);
 
@@ -22,7 +21,7 @@ describe('/videos', () => {
 
     expect(res.body.length).toBe(1)
   })
-
+  //
   it('get by id /videos/id', async () => {
     const setId = 23
     const dataWithVideoId = dataset2(setId)
@@ -32,15 +31,11 @@ describe('/videos', () => {
       .get(`${SETTINGS.PATH.VIDEOS}/${setId}`)
       .expect(200)
 
-    // console.log('------------', res.body)
-
     expect(res.body.id).toBe(setId)
-    //expect(res.body[0]).toEqual(dataset1.videos[0])
   })
 })
 
 // ---- POST --- //
-
 it('should create', async () => {
   setDB()
   const newVideo: InputForCreateVideoType = {
@@ -105,14 +100,10 @@ it('update video by Id', async () => {
   const cangedTitle = 'my new title'
   const changedVideo = video1(setId, cangedTitle)
   
-  console.log('changedVideo => ', changedVideo);
   const res = await req
     .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
     .send(changedVideo)
-    .expect(204)
-
-  console.log('after => ', db.videos);
-  console.log('+++++++++   ', res.body);
+    .expect(201)
 
   expect(db.videos.length).toBe(2)
   expect(res.body.title).toEqual(cangedTitle)

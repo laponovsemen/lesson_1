@@ -15,7 +15,6 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
   const inputVideo = req.body;
   const isRequerFields = !!(inputVideo.availableResolutions && inputVideo.title && inputVideo.author && inputVideo.minAgeRestriction && inputVideo.publicationDate && inputVideo.canBeDownloaded)
   let isUpdateVideo = false
-  console.log('isRequerFields', isRequerFields, req.params.id);
 
   if (isRequerFields && req.params.id) {
     setDB({
@@ -28,9 +27,8 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
       })
     })
     if (isUpdateVideo) {
-      console.log('return', inputVideo)
       res
-        .status(204)
+        .status(201)
         .json(inputVideo)
     } else {
       res
