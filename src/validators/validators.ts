@@ -1,8 +1,8 @@
 import { ErrorsMessageType, ErrorType } from "../types/errorType"
 import { ResolutionsEnum, TypeRequestEnum } from "../videos/enums/videos-enum";
 import { InputForCreateVideoType, InputForUpdateVideoType } from "../videos/types/videos-types";
-// ? type
-export const videoValidator = (typeRequest: TypeRequestEnum, videoData: InputForUpdateVideoType): ErrorType => {
+
+export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): ErrorType => {
   const error: ErrorType = {
     errorsMessages: []
   }
@@ -30,7 +30,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: InputFor
   }
   
   if (!videoData.availableResolutions) {
-    if( typeRequest === TypeRequestEnum.createVideo ) { // this request requires a required field
+    if( typeRequest === TypeRequestEnum.createVideo || typeRequest === TypeRequestEnum.updateVideo ) { // this request requires a required field
       error.errorsMessages.push({ field: 'availableResolutions', message: 'video availableResolutions missing' })
     }
   } else {
@@ -44,7 +44,14 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: InputFor
       }
     }
 
-  if (!videoData.minAgeRestriction) {
+  if (!videoData.minAgeRestriction && typeRequest === TypeRequestEnum.updateVideo) {
+    error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction missing' })
+  }
+  if (!videoData.canBeDownloaded && typeRequest === TypeRequestEnum.updateVideo) {
+    error.errorsMessages.push({ field: 'canBeDownloaded', message: 'video canBeDownloaded missing' })
+  }
+  if (!videoData.publicationDate && typeRequest === TypeRequestEnum.updateVideo) {
+    error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate missing' })
   }
   }
 

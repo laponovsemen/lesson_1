@@ -1,34 +1,37 @@
 import { Request, Response } from 'express'
-import { db } from '../../db/db'
+import { db, setDB } from '../../db/db'
 import { InputForUpdateVideoType, OutputVideoType } from '../types/videos-types';
 import { ErrorType } from '../../types/errorType';
+import { videoValidator } from '../../validators/validators';
+import { TypeRequestEnum } from '../enums/videos-enum';
 
 type ParamsType = {
   id: string
 }
-type ResBodyType = OutputVideoType | ErrorType
+type ResBodyType = OutputVideoType
 
-export const updateVideoController = (req: Request<ParamsType, any, InputForUpdateVideoType>, res: Response<ResBodyType>) => {
+export const updateVideoController = (req: Request<ParamsType, any, OutputVideoType>, res: Response<any>) => {
 
   const inputVideo = req.body;
-  const isRequerFields = inputVideo.title && inputVideo.author
+  const isRequerFields = !!(inputVideo.availableResolutions && inputVideo.title && inputVideo.author && inputVideo.minAgeRestriction && inputVideo.publicationDate && inputVideo.canBeDownloaded)
   let isUpdateVideo = false
+  console.log('isRequerFields', isRequerFields, req.params.id);
 
   if (isRequerFields && req.params.id) {
-    db.videos.map((video) => {
-      if (video.id === +req.params.id) {
-        isUpdateVideo = true
-        return {
-          ...video,
-          ...inputVideo
+    setDB({
+      videos: db.videos.map((video) => {
+        if (video.id === +req.params.id) {
+          isUpdateVideo = true
+          return inputVideo
         }
-      }
-      return video
+        return video
+      })
     })
-
     if (isUpdateVideo) {
+      console.log('return', inputVideo)
       res
-        .sendStatus(204)
+        .status(204)
+        .json(inputVideo)
     } else {
       res
         .sendStatus(404)
@@ -36,50 +39,6 @@ export const updateVideoController = (req: Request<ParamsType, any, InputForUpda
   } else {
     res
       .status(400)
-      .json(updateVideoValidator(+req.params.id, inputVideo))
+      .json(videoValidator(TypeRequestEnum.updateVideo, inputVideo))
   }
-}
-
-// const createNewVideo = (videoData: InputVideoType): OutputVideoType => {
-//   return {
-//     id: Date.now() + Math.random(),
-//     title: videoData.title,
-//     author: videoData.author,
-//     canBeDownloaded: true,
-//     minAgeRestriction: null,
-//     createdAt: new Date().toISOString(),
-//     publicationDate: new Date().toISOString(),
-//     availableResolutions: videoData.availableResolutions,
-//   }
-// }
-
-const updateVideoValidator = (IdVide: number, videoData: InputForUpdateVideoType): ErrorType => {
-  const error: ErrorType = {
-    errorsMessages: []
-  }
-
-  if (!videoData.title) {
-    error.errorsMessages.push({ field: 'title', message: 'video title missing' })
-  } else {
-    if (typeof videoData.title !== 'string') {
-      error.errorsMessages.push({ field: 'title', message: 'video title should be string' })
-    }
-  }
-
-  if (!videoData.author) {
-    error.errorsMessages.push({ field: 'author', message: 'video author missing' })
-  } else {
-    if (typeof videoData.author !== 'string') {
-      error.errorsMessages.push(
-        { field: 'author', message: 'video author should be string' }
-      )
-    }
-  }
-
-  if (!IdVide) {
-    error.errorsMessages.push({ field: 'id', message: 'video id not specified' })
-
-  }
-
-  return error
 }

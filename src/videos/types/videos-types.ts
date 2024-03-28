@@ -20,7 +20,7 @@ export type OutputVideoType = {
   export type InputForUpdateVideoType = {
   title: string
   author: string
-  id?: number
+  id: number
   canBeDownloaded?: boolean
   minAgeRestriction?: number | null
   createdAt?: string // ? Date 

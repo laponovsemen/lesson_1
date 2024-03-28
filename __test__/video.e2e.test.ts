@@ -1,7 +1,7 @@
 import { req } from './test-helpers'
 import { SETTINGS } from '../src/settings'
 import { db, setDB } from '../src/db/db'
-import { dataset1, dataset2 } from './dataset'
+import { dataset1, dataset2, video1 } from './dataset'
 import { ResolutionsEnum, TypeRequestEnum } from '../src/videos/enums/videos-enum'
 import { InputForCreateVideoType } from '../src/videos/types/videos-types'
 import { videoValidator } from '../src/validators/validators'
@@ -86,34 +86,34 @@ it('delete video by Id', async () => {
   const dataWithVideoId = dataset2(setId)
   setDB(dataWithVideoId);
 
-  console.log('before => ', db.videos);
-
   const res = await req
-    .delete(`/${SETTINGS.PATH.VIDEOS}/${setId}`)
+    .delete(`${SETTINGS.PATH.VIDEOS}/${setId}`)
     .expect(204)
 
-console.log('after => ', db.videos);
-  console.log('+++++++++   ', res.status);
-
   expect(db.videos.length).toBe(1)
+  expect(db.videos[0].id).not.toBe(setId)
 })
 
 // --- PUT --- //
-// it('delete video by Id', async () => {
-//   setDB();
-//   setDB(dataset1);
-//   const setId = 23
-//   const dataWithVideoId = dataset2(setId)
-//   setDB(dataWithVideoId);
+it('update video by Id', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+  
+  const cangedTitle = 'my new title'
+  const changedVideo = video1(setId, cangedTitle)
+  
+  console.log('changedVideo => ', changedVideo);
+  const res = await req
+    .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
+    .send(changedVideo)
+    .expect(204)
 
-//   console.log('before => ', db.videos);
+  console.log('after => ', db.videos);
+  console.log('+++++++++   ', res.body);
 
-//   const res = await req
-//     .delete(`SETTINGS.PATH.VIDEOS/${setId}`)
-//     .expect(204)
-
-// console.log('after => ', db.videos);
-//   console.log('+++++++++   ', res.status);
-
-//   expect(db.videos.length).toBe(1)
-// })
+  expect(db.videos.length).toBe(2)
+  expect(res.body.title).toEqual(cangedTitle)
+})
