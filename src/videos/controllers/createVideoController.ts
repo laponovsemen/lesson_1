@@ -10,11 +10,9 @@ type ResBodyType = OutputVideoType | ErrorType
 
 export const createVideoController = (req: Request<any, any, InputForCreateVideoType>, res: Response<ResBodyType>) => {
   const inputVideo = req.body;
-  const isRequerFields = inputVideo.title
-    && inputVideo.availableResolutions.length > 0
-    && inputVideo.author
+  const error = videoValidator(TypeRequestEnum.createVideo, inputVideo)
 
-  if (isRequerFields) {
+  if (!error.errorsMessages.length) {
     const newVideo = createNewVideo(inputVideo)
     db.videos.push(newVideo)
     res
@@ -23,7 +21,7 @@ export const createVideoController = (req: Request<any, any, InputForCreateVideo
   } else {
     res
       .status(400)
-      .json(videoValidator(TypeRequestEnum.createVideo, inputVideo))
+      .json(error)
   }
 }
 

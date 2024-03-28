@@ -28,7 +28,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
       error.errorsMessages.push(
         { field: 'author', message: 'video author should be string' }
       )
-    } else if (videoData.title.length > 20) {
+    } else if (videoData.author.length > 20) {
       error.errorsMessages.push({ field: 'author', message: 'video author max length = 20' })
     }
   }

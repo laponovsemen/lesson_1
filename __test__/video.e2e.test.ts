@@ -62,15 +62,47 @@ it('ERORR while video create in availableResolutions incorrect values', async ()
     availableResolutions: ['asd']
   }
 
-  const error = videoValidator(TypeRequestEnum.createVideo, newVideo); 
+  const res = await req
+    .post(SETTINGS.PATH.VIDEOS)
+    .send( newVideo) // отправка данных
+    .expect(400)
+
+  expect(res.body.errorsMessages.length).toBe(1)
+  expect(res.body.errorsMessages[0].message).toEqual('incorrect values asd')
+})
+//
+it('ERORR while video create max length title', async () => {
+  setDB()
+  const newVideo: InputForCreateVideoType = {
+    title: 'new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new',
+    author: 'other',
+    availableResolutions: [ResolutionsEnum.P144]
+  }
 
   const res = await req
     .post(SETTINGS.PATH.VIDEOS)
-    .send(videoValidator(TypeRequestEnum.createVideo, newVideo)) // отправка данных
+    .send(newVideo) // отправка данных
     .expect(400)
 
-  expect(error.errorsMessages.length).toBe(1)
-  expect(error.errorsMessages[0].message).toEqual('incorrect values asd')
+  expect(res.body.errorsMessages.length).toBe(1)
+  expect(res.body.errorsMessages[0].message).toEqual('video title max length = 40')
+})
+//
+it('ERORR while video create max length author', async () => {
+  setDB()
+  const newVideo: InputForCreateVideoType = {
+    title: 'new video1new',
+    author: 'other otherotherotherotherotherotherotherotherotherotherotherotherother',
+    availableResolutions: [ResolutionsEnum.P144]
+  }
+
+  const res = await req
+    .post(SETTINGS.PATH.VIDEOS)
+    .send(newVideo) // отправка данных
+    .expect(400)
+
+  expect(res.body.errorsMessages.length).toBe(1)
+  expect(res.body.errorsMessages[0].message).toEqual('video author max length = 20')
 })
 
 // --- DELETE --- //
