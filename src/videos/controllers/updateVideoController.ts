@@ -20,12 +20,9 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
     const updatedVideos = db.videos.map((video) => {
       if (video.id === +req.params.id) {
         isUpdateVideo = true
-        return inputVideo
+        return {...inputVideo, id: +req.params.id}
       }
-      return {
-        ...video,
-        id: +req.params.id
-      }
+      return video
     })
     setDB({videos: updatedVideos})
 
