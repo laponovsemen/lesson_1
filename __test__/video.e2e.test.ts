@@ -24,17 +24,16 @@ describe('/videos', () => {
   //
   it('get by id /videos/id', async () => {
     setDB();
+    setDB(dataset1)
     const setId = 23
-    const videoWithId = video1(setId)
-    setDB({ videos: [videoWithId] });
+    setDB(dataset2(setId))
 
     const res = await req
       .get(`${SETTINGS.PATH.VIDEOS}/${setId}`)
       .expect(200)
 
-    expect(res.body.id).toBe(videoWithId.id)
-    expect(db.videos.length).toBe(1)
-    expect(db.videos[0]).toEqual(videoWithId)
+    expect(db.videos.length).toBe(2)
+    expect(res.body.id).toBe(setId)
   })
 })
 

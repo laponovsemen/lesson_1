@@ -22,7 +22,10 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
         isUpdateVideo = true
         return inputVideo
       }
-      return video
+      return {
+        ...video,
+        id: +req.params.id
+      }
     })
     setDB({videos: updatedVideos})
 
