@@ -65,9 +65,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
     if (!videoData.publicationDate) {
       error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate missing' })
     } else {
-      console.log(typeof videoData.publicationDate, videoData.publicationDate);
-      
-      if(!re.test(videoData.publicationDate)) {
+      if(isNaN(Date.parse(videoData.publicationDate))) {
         error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate is not date' })
       }
     }
@@ -81,7 +79,3 @@ const availableResolutionsValid = (resolutions: ResolutionsEnum[]): string[] => 
   const FindedErrorValues = resolutions.filter((resolution) => !strictValues.includes(resolution))
   return FindedErrorValues
 }
-
-const isDate = (obj: any): boolean => Object.prototype.toString.call(obj) === '[object Date]';
-
-const re = new RegExp('(\\d{2}).(\\d{2}).(\\d{4})');

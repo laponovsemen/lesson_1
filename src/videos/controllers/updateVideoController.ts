@@ -15,7 +15,6 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
   const inputVideo = req.body;
   const error = videoValidator(TypeRequestEnum.updateVideo, inputVideo)
   let isUpdateVideo = false
-console.log(error);
 
   if (error.errorsMessages.length === 0 && req.params.id) {
     const updatedVideos = db.videos.map((video) => {

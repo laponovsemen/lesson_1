@@ -10,7 +10,7 @@ export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAge
   canBeDownloaded: canBeDownloaded ?? false,
   minAgeRestriction: minAgeRestriction ?? null,
   createdAt: new Date().toISOString(),
-  publicationDate: publicationDate ?? moment().format('DD MM YYYY hh:mm:ss'),
+  publicationDate: publicationDate ?? new Date().toISOString(),
   availableResolutions: [ResolutionsEnum.P1440],
 })
 
