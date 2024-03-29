@@ -28,8 +28,7 @@ export const updateVideoController = (req: Request<ParamsType, any, OutputVideoT
 
     if (isUpdateVideo) {
       res
-        .status(201)
-        .json(inputVideo)
+        .sendStatus(204)
     } else {
       res
         .sendStatus(404)
