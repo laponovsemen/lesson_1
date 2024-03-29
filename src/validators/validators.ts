@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { ErrorsMessageType, ErrorType } from "../types/errorType"
 import { ResolutionsEnum, TypeRequestEnum } from "../videos/enums/videos-enum";
 import { InputForCreateVideoType, InputForUpdateVideoType } from "../videos/types/videos-types";
@@ -8,9 +9,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
   }
 
   if (!videoData.title) {
-    if( typeRequest === TypeRequestEnum.createVideo || typeRequest === TypeRequestEnum.updateVideo ) { // this request requires a required field
-      error.errorsMessages.push({ field: 'title', message: 'video title missing' })
-    }
+    error.errorsMessages.push({ field: 'title', message: 'video title missing' })
   } else {
     if (typeof videoData.title !== 'string') {
       error.errorsMessages.push({ field: 'title', message: 'video title should be string' })
@@ -20,9 +19,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
   }
 
   if (!videoData.author) {
-    if( typeRequest === TypeRequestEnum.createVideo || typeRequest === TypeRequestEnum.updateVideo ) { // this request requires a required field
-      error.errorsMessages.push({ field: 'author', message: 'video author missing' })
-    }
+    error.errorsMessages.push({ field: 'author', message: 'video author missing' })
   } else {
     if (typeof videoData.author !== 'string') {
       error.errorsMessages.push(
@@ -34,9 +31,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
   }
   
   if (!videoData.availableResolutions) {
-    if( typeRequest === TypeRequestEnum.createVideo || typeRequest === TypeRequestEnum.updateVideo ) { // this request requires a required field
-      error.errorsMessages.push({ field: 'availableResolutions', message: 'video availableResolutions missing' })
-    }
+    error.errorsMessages.push({ field: 'availableResolutions', message: 'video availableResolutions missing' })
   } else {
     if (videoData.availableResolutions.length < 1) {
       error.errorsMessages.push({field: 'availableResolutions', message: "video availableResolutions don't empty"})
@@ -47,28 +42,35 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
         error.errorsMessages.push({field: 'availableResolutions', message: `incorrect values ${incorrectValues.join(', ')}`})
       }
     }
-
-  if (videoData.minAgeRestriction === null && typeRequest === TypeRequestEnum.updateVideo) {
-    error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction missing' })
-  } else if(typeRequest === TypeRequestEnum.updateVideo) {
-    if( videoData.minAgeRestriction > 18) {
-      error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction max 18' })
-    } else if (videoData.minAgeRestriction < 1)
-      error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction min 1' })
   }
-
-  if ((videoData.canBeDownloaded === null || typeof videoData.canBeDownloaded === 'number') && typeRequest === TypeRequestEnum.updateVideo) {
-    error.errorsMessages.push({ field: 'canBeDownloaded', message: 'video canBeDownloaded missing' })
-  } else if(typeRequest === TypeRequestEnum.updateVideo) {
-    if(typeof videoData.canBeDownloaded !== 'boolean') {
-      error.errorsMessages.push({ field: 'canBeDownloaded', message: 'video canBeDownloaded type shoul be boolean' })
-
+  if (typeRequest === TypeRequestEnum.updateVideo) {
+    if (videoData.minAgeRestriction === null) {
+      error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction missing' })
+    } else {
+      if( videoData.minAgeRestriction > 18) {
+        error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction max 18' })
+      } else if (videoData.minAgeRestriction < 1)
+        error.errorsMessages.push({ field: 'minAgeRestriction', message: 'video minAgeRestriction min 1' })
     }
-  }
-
-  if (!videoData.publicationDate && typeRequest === TypeRequestEnum.updateVideo) {
-    error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate missing' })
-  }
+  
+    if ((videoData.canBeDownloaded === null || typeof videoData.canBeDownloaded === 'number')) {
+      error.errorsMessages.push({ field: 'canBeDownloaded', message: 'video canBeDownloaded missing' })
+    } else {
+      if(typeof videoData.canBeDownloaded !== 'boolean') {
+        error.errorsMessages.push({ field: 'canBeDownloaded', message: 'video canBeDownloaded type shoul be boolean' })
+  
+      }
+    }
+    
+    if (!videoData.publicationDate) {
+      error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate missing' })
+    } else {
+      console.log(typeof videoData.publicationDate, videoData.publicationDate);
+      
+      if(!re.test(videoData.publicationDate)) {
+        error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate is not date' })
+      }
+    }
   }
 
   return error
@@ -79,3 +81,7 @@ const availableResolutionsValid = (resolutions: ResolutionsEnum[]): string[] => 
   const FindedErrorValues = resolutions.filter((resolution) => !strictValues.includes(resolution))
   return FindedErrorValues
 }
+
+const isDate = (obj: any): boolean => Object.prototype.toString.call(obj) === '[object Date]';
+
+const re = new RegExp('(\\d{2}).(\\d{2}).(\\d{4})');

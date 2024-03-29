@@ -7,7 +7,7 @@ export type OutputVideoType = {
   canBeDownloaded: boolean
   minAgeRestriction: number | null
   createdAt: string // ? Date 
-  publicationDate: string // ? Date
+  publicationDate: Date | string // ? Date
   availableResolutions: ResolutionsEnum[]
 }
 

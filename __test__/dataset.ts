@@ -1,15 +1,16 @@
+import moment from 'moment';
 import {DBType} from '../src/db/db'
 import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
 import { OutputVideoType } from '../src/videos/types/videos-types'
 
-export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAgeRestriction?: number): OutputVideoType => ({
+export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAgeRestriction?: number, publicationDate?: string): OutputVideoType => ({
   id: id ?? (Date.now() + Math.random()),
   title: title ?? ('t' + Date.now() + Math.random()),
   author: 'string',
   canBeDownloaded: canBeDownloaded ?? false,
   minAgeRestriction: minAgeRestriction ?? null,
   createdAt: new Date().toISOString(),
-  publicationDate: new Date().toISOString(),
+  publicationDate: publicationDate ?? moment().format('DD MM YYYY hh:mm:ss'),
   availableResolutions: [ResolutionsEnum.P1440],
 })
 
@@ -25,7 +26,7 @@ export const dataset2 = (setId: number, title?: string, minAgeRestriction?: numb
     canBeDownloaded: true,
     minAgeRestriction: minAgeRestriction ?? null,
     createdAt: new Date().toISOString(),
-    publicationDate: new Date().toISOString(),
+    publicationDate: new Date(),
     availableResolutions: [ResolutionsEnum.P240],
   }]
 

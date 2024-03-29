@@ -220,3 +220,24 @@ it('ERROR minAgeRestriction min 1', async () => {
   expect(res.body.errorsMessages.length).toBe(1)
   expect(res.body.errorsMessages[0].message).toEqual('video minAgeRestriction min 1')
 })
+
+//
+it('ERROR publicationDate is not date', async () => {
+  setDB();
+  setDB(dataset1);
+  const setId = 23
+  const dataWithVideoId = dataset2(setId)
+  setDB(dataWithVideoId);
+
+  const publicationDate = 'not date'
+  const cangedTitle = 'my new title'
+  const changedVideo = video1(setId, cangedTitle, false, 5, publicationDate)
+
+  const res = await req
+    .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
+    .send(changedVideo)
+    .expect(400)
+
+  expect(res.body.errorsMessages.length).toBe(1)
+  expect(res.body.errorsMessages[0].message).toEqual('video publicationDate is not date')
+})
