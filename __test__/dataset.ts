@@ -3,7 +3,7 @@ import {DBType} from '../src/db/db'
 import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
 import { OutputVideoType } from '../src/videos/types/videos-types'
 
-export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAgeRestriction?: number, publicationDate?: string): OutputVideoType => ({
+export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAgeRestriction?: number, publicationDate?: any): OutputVideoType => ({
   id: id ?? (Date.now() + Math.random()),
   title: title ?? ('t' + Date.now() + Math.random()),
   author: 'string',

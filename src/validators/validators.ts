@@ -65,7 +65,7 @@ export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): Er
     if (!videoData.publicationDate) {
       error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate missing' })
     } else {
-      if(isNaN(Date.parse(videoData.publicationDate))) {
+      if(typeof videoData.publicationDate !== 'string' || isNaN(Date.parse(videoData.publicationDate))) {
         error.errorsMessages.push({ field: 'publicationDate', message: 'video publicationDate is not date' })
       }
     }

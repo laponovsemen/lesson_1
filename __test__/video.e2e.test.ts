@@ -229,7 +229,7 @@ it('ERROR publicationDate is not date', async () => {
   const dataWithVideoId = dataset2(setId)
   setDB(dataWithVideoId);
 
-  const publicationDate = 'not date'
+  const publicationDate = 1995
   const cangedTitle = 'my new title'
   const changedVideo = video1(setId, cangedTitle, false, 5, publicationDate)
 
