@@ -1,34 +1,21 @@
 import { Request, Response } from 'express'
-import { db, setDB } from '../../db/db'
-import { OutputVideoType } from '../types/videos-types';
+import { InputForUpdateVideoType, OutputVideoType } from '../types/videos-types';
 import { videoValidator } from '../../validators/validators';
 import { TypeRequestEnum } from '../enums/videos-enum';
 import { ErrorType } from '../../types/errorType';
+import { videoRepository } from '../repositories/videoRepository';
 
 type ParamsType = {
   id: string
 }
 type ResBodyType = OutputVideoType
 
-export const updateVideoController = (req: Request<ParamsType, any, OutputVideoType>, res: Response<ResBodyType | ErrorType>) => {
-
+export const updateVideoController = (req: Request<ParamsType, any, InputForUpdateVideoType>, res: Response<ResBodyType | ErrorType>) => {
   const inputVideo = req.body;
   const error = videoValidator(TypeRequestEnum.updateVideo, inputVideo)
-  let isUpdateVideo = false
 
   if (error.errorsMessages.length === 0 && req.params.id) {
-    const updatedVideos = db.videos.map((video) => {
-      if (video.id === +req.params.id) {
-        isUpdateVideo = true
-        return {
-          ...video,
-          ...inputVideo,
-          id: +req.params.id
-        }
-      }
-      return video
-    })
-    setDB({videos: updatedVideos})
+    const isUpdateVideo = videoRepository.updateVideo(+req.params.id, inputVideo)
 
     if (isUpdateVideo) {
       res

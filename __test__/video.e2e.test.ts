@@ -5,6 +5,7 @@ import { dataset1, dataset2, video1 } from './dataset'
 import { ResolutionsEnum, TypeRequestEnum } from '../src/videos/enums/videos-enum'
 import { InputForCreateVideoType } from '../src/videos/types/videos-types'
 import { videoValidator } from '../src/validators/validators'
+import { title } from 'process'
 
 describe('/videos', () => {
   beforeAll(async () => {
@@ -116,7 +117,7 @@ it('delete video by Id', async () => {
   const dataWithVideoId = dataset2(setId)
   setDB(dataWithVideoId);
 
-  const res = await req
+  await req
     .delete(`${SETTINGS.PATH.VIDEOS}/${setId}`)
     .expect(204)
 
@@ -148,13 +149,17 @@ it('update video by Id', async () => {
 
   const cangedTitle = 'my new title'
   const changedVideo = video1(setId, cangedTitle, false, 5)
+  // const changedTitleAndAuthor = {
+  //   title: cangedTitle,
+  //   author: 'new'
+  // }
   const res = await req
     .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
     .send(changedVideo)
-    .expect(201)
+    .expect(204)
 
   expect(db.videos.length).toBe(2)
-  expect(res.body.title).toEqual(cangedTitle)
+  expect(res.statusCode).toEqual(204)
 })
 
 //
