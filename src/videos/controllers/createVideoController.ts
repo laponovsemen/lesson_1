@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { ErrorType } from '../../types/errorType';
-import { InputForCreateVideoType, OutputVideoType } from '../types/videos-types';
 import { videoValidator } from '../../validators/validators';
 import { TypeRequestEnum } from '../enums/videos-enum';
 import { videoRepository } from '../repositories/videoRepository';
+import { InputForCreateVideoType, OutputVideoType } from '../../types/videos-types';
 
 type ResBodyType = OutputVideoType | ErrorType
 

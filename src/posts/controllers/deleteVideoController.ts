@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { OutputVideoType } from '../types/posts-types'
-import { videoRepository } from '../repositories/postRepository'
+import { videoRepository } from '../../videos/repositories/videoRepository'
+import { OutputVideoType } from '../../types/videos-types'
 
 type ParamsType = {
   id: string
