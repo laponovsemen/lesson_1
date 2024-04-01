@@ -1,8 +1,8 @@
 import moment from 'moment';
 import {DBType} from '../src/db/db'
 import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
-import { OutputVideoType } from '../src/videos/types/videos-types'
-import { PostType } from '../src/videos/types/posts-types';
+import { PostType } from '../src/types/posts-types';
+import { OutputVideoType } from '../src/types/videos-types';
 
 export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAgeRestriction?: number, publicationDate?: any): OutputVideoType => ({
   id: id ?? (Date.now() + Math.random()),

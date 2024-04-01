@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { db } from '../../db/db'
-import { PostType } from '../../videos/types/posts-types'
+import { PostType } from '../../types/posts-types'
 
 export const getPostsController = (req: Request, res: Response<PostType[]>) => {
   res

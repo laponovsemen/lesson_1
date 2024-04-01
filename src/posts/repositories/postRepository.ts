@@ -1,6 +1,5 @@
-import moment from "moment"
 import { db } from "../../db/db"
-import { PostType } from "../../videos/types/posts-types"
+import { CreatePostType, PostType } from "../../types/posts-types"
 
 type IdPostType = string | null | undefined
 
@@ -16,21 +15,19 @@ export const postRepository = {
       return undefined
     }
   },
-//   createVideos(videoData: InputForCreateVideoType): OutputVideoType {
-//     const newVideo =  {
-//       id: Math.trunc(Date.now() + Math.random()),
-//       title: videoData.title,
-//       author: videoData.author,
-//       canBeDownloaded: false,
-//       minAgeRestriction: null,
-//       createdAt: new Date().toISOString(),
-//       publicationDate: moment(new Date()).add(1, 'day').toISOString(),
-//       availableResolutions: videoData.availableResolutions,
-//     }
+  createPost(postData: CreatePostType): PostType {
+    const newPost =  {
+      id: (Date.now() + Math.random())+'',
+      title: postData.title,
+      shortDescription:	postData.shortDescription,
+      content:	postData.content,
+      blogId:	postData.blogId,
+      blogName:	'string'
+    }
 
-//     db.videos.push(newVideo)
-//     return newVideo
-//   },
+    db.posts  .push(newPost)
+    return newPost
+  },
 //   deleteVideo(id: IdVideoType): boolean {
 //     for (let index = 0; index < db.videos.length; index++) {
 //       if (db.videos[index].id === id) {

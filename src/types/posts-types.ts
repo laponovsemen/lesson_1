@@ -1,5 +1,3 @@
-import { ResolutionsEnum } from "../enums/videos-enum"
-
 export type PostType = {
   id:	string
   title:	string
@@ -7,4 +5,10 @@ export type PostType = {
   content:	string
   blogId:	string
   blogName:	string
+  }
+export type CreatePostType = {
+  title:	string
+  shortDescription:	string
+  content:	string
+  blogId:	string
   }
