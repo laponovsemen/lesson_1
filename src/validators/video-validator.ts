@@ -1,7 +1,5 @@
-import moment from 'moment';
-import { ErrorsMessageType, ErrorType } from "../types/errorType"
+import { ErrorType } from "../types/errorType"
 import { ResolutionsEnum, TypeRequestEnum } from "../videos/enums/videos-enum";
-import { InputForCreateVideoType, InputForUpdateVideoType } from "../videos/types/videos-types";
 
 export const videoValidator = (typeRequest: TypeRequestEnum, videoData: any): ErrorType => {
   const error: ErrorType = {

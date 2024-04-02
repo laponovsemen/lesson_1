@@ -1,4 +1,4 @@
-import { ResolutionsEnum } from "../enums/videos-enum"
+import { ResolutionsEnum } from "../videos/enums/videos-enum"
 
 export type OutputVideoType = {
   id: number

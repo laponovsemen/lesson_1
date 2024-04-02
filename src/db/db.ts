@@ -1,21 +1,23 @@
-import { OutputVideoType } from "../videos/types/videos-types"
+import { PostType } from "../types/posts-types"
+import { OutputVideoType } from "../types/videos-types"
 
 export type DBType = {
   videos: OutputVideoType[]
-  // some: any[]
+  posts: PostType[]
 }
 
 export const db: DBType = {
   videos: [],
-  // some: []
+  posts: [],
+  // blogs: []
 }
 
 export const setDB = (dataset?: Partial<DBType>) => {
   if (!dataset) {
     db.videos = []
-    // db.some = []
+    db.posts = []
   } else {
     db.videos = dataset.videos || db.videos
-    // db.some = dataset.some || db.some
+    db.posts = dataset.posts || db.posts
   }
 }
