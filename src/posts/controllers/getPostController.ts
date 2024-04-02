@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { PostType } from '../../types/posts-types'
+import { PostType } from '../../types/postsTypes'
 import { postRepository } from '../repositories/postRepository'
 
 type ParamsType = {

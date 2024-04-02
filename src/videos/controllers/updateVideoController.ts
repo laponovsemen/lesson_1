@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { InputForUpdateVideoType, OutputVideoType } from '../../types/videos-types';
+import { InputForUpdateVideoType, OutputVideoType } from '../../types/videosTypes';
 import { videoValidator } from '../../validators/video-validator';
 import { TypeRequestEnum } from '../enums/videos-enum';
 import { ErrorType } from '../../types/errorType';

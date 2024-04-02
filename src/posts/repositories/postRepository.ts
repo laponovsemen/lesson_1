@@ -1,5 +1,5 @@
 import { db } from "../../db/db"
-import { CreateUpdatePostType, PostType } from "../../types/posts-types"
+import { CreateUpdatePostType, PostType } from "../../types/postsTypes"
 
 type IdPostType = string | null | undefined
 

@@ -3,7 +3,7 @@ import { ErrorType } from '../../types/errorType';
 import { videoValidator } from '../../validators/video-validator';
 import { TypeRequestEnum } from '../enums/videos-enum';
 import { videoRepository } from '../repositories/videoRepository';
-import { InputForCreateVideoType, OutputVideoType } from '../../types/videos-types';
+import { InputForCreateVideoType, OutputVideoType } from '../../types/videosTypes';
 
 type ResBodyType = OutputVideoType | ErrorType
 

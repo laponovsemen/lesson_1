@@ -1,6 +1,6 @@
 import moment from "moment"
 import { db } from "../../db/db"
-import { InputForCreateVideoType, InputForUpdateVideoType, OutputVideoType } from "../../types/videos-types"
+import { InputForCreateVideoType, InputForUpdateVideoType, OutputVideoType } from "../../types/videosTypes"
 
 type IdVideoType = number | null | undefined
 

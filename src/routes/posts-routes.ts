@@ -4,7 +4,7 @@ import { getPostController } from "../posts/controllers/getPostController"
 import { createPostController } from "../posts/controllers/createPostController"
 import { updatePostController } from "../posts/controllers/updatePostController"
 import { deletePostController } from "../posts/controllers/deletePostController"
-import { lengthValid } from "../middlewares/posts-validator"
+import { lengthValid } from "../middlewares/validators"
 import { errorsValidation } from "../middlewares/errors-validation"
 import { check } from "express-validator"
 

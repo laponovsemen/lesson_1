@@ -17,8 +17,8 @@ const errorParser = (errorExpress: ExErrType[]) => ({
 })
 
 export const errorsValidation = (req: Request, res: Response, next: NextFunction) => {
-  const expressErrors = validationResult(req).array() as ExErrType[]
-
+  const expressErrors = validationResult(req).array({ onlyFirstError: true }) as ExErrType[]
+  
   if (expressErrors.length) {
     const error = errorParser(expressErrors)
     res.status(400).json(error)

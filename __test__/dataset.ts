@@ -1,8 +1,9 @@
 import moment from 'moment';
 import {DBType} from '../src/db/db'
 import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
-import { PostType } from '../src/types/posts-types';
-import { OutputVideoType } from '../src/types/videos-types';
+import { PostType } from '../src/types/postsTypes';
+import { OutputVideoType } from '../src/types/videosTypes';
+import { BlogType } from '../src/types/blogsType';
 
 export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAgeRestriction?: number, publicationDate?: any): OutputVideoType => ({
   id: id ?? (Date.now() + Math.random()),
@@ -24,9 +25,17 @@ export const createPost= (): PostType => ({
   blogName:	'string'
 })
 
+export const createBlog= (): BlogType => ({
+  id: (Date.now() + Math.random())+'',
+  name: ('t' + Date.now() + Math.random()),
+  description:	'string',
+  websiteUrl:	'string'
+})
+
 export const dataset1: DBType = {
   videos: [video1()],
   posts: [createPost()],
+  blogs: [createBlog()]
 }
 
 export const dataVideoSet2 = (setId: number, title?: string, minAgeRestriction?: number): DBType => {
@@ -43,6 +52,7 @@ export const dataVideoSet2 = (setId: number, title?: string, minAgeRestriction?:
 
   return {
     videos: videosData,
-    posts: []
+    posts: [],
+    blogs: []
   }
 }
