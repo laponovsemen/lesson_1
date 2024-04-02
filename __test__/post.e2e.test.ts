@@ -79,35 +79,39 @@ it('ERORR invalid post title, shortDescription, content', async () => {
 })
 
 
-// // --- DELETE --- //
-// it('delete video by Id', async () => {
-//   setDB();
-//   setDB(dataset1);
-//   const setId = 23
-//   const dataWithVideoId = dataset2(setId)
-//   setDB(dataWithVideoId);
+// --- DELETE --- //
+it('delete post by Id', async () => {
+  setDB();
+  const setId = '23'
+  const post = {
+    ...createPost(),
+    id: setId
+  }
+  setDB({posts: [createPost(), post]});
 
-//   await req
-//     .delete(`${SETTINGS.PATH.VIDEOS}/${setId}`)
-//     .expect(204)
+  await req
+    .delete(`${SETTINGS.PATH.POSTS}/${setId}`)
+    .expect(204)
 
-//   expect(db.videos.length).toBe(1)
-//   expect(db.videos[0].id).not.toBe(setId)
-// })
-// //
-// it('ERROR find by Id', async () => {
-//   setDB();
-//   setDB(dataset1);
-//   const setId = 23
-//   const dataWithVideoId = dataset2(setId)
-//   setDB(dataWithVideoId);
+  expect(db.posts.length).toBe(1)
+  expect(db.posts[0].id).not.toBe(setId)
+})
+//
+it('ERROR not delete by Id', async () => {
+  setDB();
+  const setId = '23'
+  const post = {
+    ...createPost(),
+    id: setId
+  }
+  setDB({posts: [createPost(), post]});
 
-//   const res = await req
-//     .delete(`${SETTINGS.PATH.VIDEOS}/${4052}`)
-//     .expect(404)
+  const res = await req
+    .delete(`${SETTINGS.PATH.POSTS}/${4052}`)
+    .expect(404)
 
-//   expect(res.statusCode).toBe(404)
-// })
+  expect(res.statusCode).toBe(404)
+})
 
 // --- PUT --- //
 it('update post by Id', async () => {

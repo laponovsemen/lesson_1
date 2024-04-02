@@ -3,6 +3,7 @@ import { getPostsController } from "../posts/controllers/getPostsController"
 import { getPostController } from "../posts/controllers/getPostController"
 import { createPostController } from "../posts/controllers/createPostController"
 import { updatePostController } from "../posts/controllers/updatePostController"
+import { deletePostController } from "../posts/controllers/deletePostController"
 import { lengthValid } from "../middlewares/posts-validator"
 import { errorsValidation } from "../middlewares/errors-validation"
 import { check } from "express-validator"
@@ -19,7 +20,7 @@ postsRouter.post(
   lengthValid({title: 'content', max: 1000}),
   errorsValidation,
   createPostController)
-// videosRouter.delete('/:id', deleteVideoController)
+postsRouter.delete('/:id', deletePostController)
 postsRouter.put(
   '/:id',
   check(['title', 'shortDescription', 'content', 'blogId']),
