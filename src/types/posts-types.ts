@@ -5,10 +5,11 @@ export type PostType = {
   content:	string // maxLength: 1000
   blogId:	string
   blogName:	string
-  }
-export type CreatePostType = {
+}
+
+export type CreateUpdatePostType = {
   title:	string
   shortDescription:	string
   content:	string
   blogId:	string
-  }
+}

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import { ErrorType } from '../../types/errorType';
-import { CreatePostType, PostType } from '../../types/posts-types';
+import { CreateUpdatePostType, PostType } from '../../types/posts-types';
 import { postRepository } from '../repositories/postRepository';
 
 type ResBodyType = PostType | ErrorType
 
-export const createPostController = (req: Request<any, any, CreatePostType>, res: Response<ResBodyType>) => {
+export const createPostController = (req: Request<any, any, CreateUpdatePostType>, res: Response<ResBodyType>) => {
   const inputPost = req.body;
   // const error = videoValidator(TypeRequestEnum.createVideo, inputVideo)
   const error = {errorsMessages: []}

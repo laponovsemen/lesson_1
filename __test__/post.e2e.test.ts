@@ -2,7 +2,7 @@ import { req } from './test-helpers'
 import { SETTINGS } from '../src/settings'
 import { db, setDB } from '../src/db/db'
 import { dataset1, createPost } from './dataset'
-import { CreatePostType } from '../src/types/posts-types'
+import { CreateUpdatePostType } from '../src/types/posts-types'
 
 describe(SETTINGS.PATH.POSTS, () => {
   beforeAll(async () => {
@@ -37,7 +37,7 @@ describe(SETTINGS.PATH.POSTS, () => {
 // ---- POST --- //
 it('should create post', async () => {
   setDB()
-  const newPost: CreatePostType = {
+  const newPost: CreateUpdatePostType = {
     title: 'new post',
     blogId: '123',
     content: 'bla bla bla bla bla',
@@ -57,7 +57,7 @@ it('should create post', async () => {
 //
 it('ERORR invalid post title, shortDescription, content', async () => {
   setDB()
-  const newPost: CreatePostType = {
+  const newPost: CreateUpdatePostType = {
     title: 'length 31 symbols sssssssssssss',
     blogId: '123',
     content: 'length 101 symbols ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
@@ -109,28 +109,35 @@ it('ERORR invalid post title, shortDescription, content', async () => {
 //   expect(res.statusCode).toBe(404)
 // })
 
-// // --- PUT --- //
-// it('update video by Id', async () => {
-//   setDB();
-//   setDB(dataset1);
-//   const setId = 23
-//   const dataWithVideoId = dataset2(setId, 'title', 3)
-//   setDB(dataWithVideoId);
+// --- PUT --- //
+it('update post by Id', async () => {
+  setDB();
+  const setId = '23'
+  const post = {
+    ...createPost(),
+    id: setId
+  }
+  setDB({posts: [createPost(), post]});
 
-//   const cangedTitle = 'my new title'
-//   const changedVideo = video1(setId, cangedTitle, false, 5)
-//   // const changedTitleAndAuthor = {
-//   //   title: cangedTitle,
-//   //   author: 'new'
-//   // }
-//   const res = await req
-//     .put(`${SETTINGS.PATH.VIDEOS}/${setId}`)
-//     .send(changedVideo)
-//     .expect(204)
+  const cangedTitle = 'changed title'
+  const changedPost: CreateUpdatePostType = {
+    title: cangedTitle,
+    content: post.content,
+    shortDescription: post.shortDescription,
+    blogId: post.blogId,
+  }
 
-//   expect(db.videos.length).toBe(2)
-//   expect(res.statusCode).toEqual(204)
-// })
+  const res = await req
+    .put(`${SETTINGS.PATH.POSTS}/${setId}`)
+    .send(changedPost)
+    .expect(204)
+
+  const findedPost = db.posts.find((post) => post.id === setId)
+  expect(db.posts.length).toBe(2)
+  expect(res.statusCode).toEqual(204)
+  expect(findedPost?.title).toEqual(cangedTitle)
+  expect(findedPost?.id).toEqual(setId)
+})
 
 // //
 // it('ERROR file type shoul be boolean', async () => {

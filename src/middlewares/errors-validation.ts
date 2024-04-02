@@ -21,7 +21,6 @@ export const errorsValidation = (req: Request, res: Response, next: NextFunction
 
   if (expressErrors.length) {
     const error = errorParser(expressErrors)
-    console.log('error --------- ', expressErrors)
     res.status(400).json(error)
   } else {
     next()

@@ -1,5 +1,5 @@
 import { db } from "../../db/db"
-import { CreatePostType, PostType } from "../../types/posts-types"
+import { CreateUpdatePostType, PostType } from "../../types/posts-types"
 
 type IdPostType = string | null | undefined
 
@@ -13,7 +13,7 @@ export const postRepository = {
       return undefined
     }
   },
-  createPost(postData: CreatePostType): PostType {
+  createPost(postData: CreateUpdatePostType): PostType {
     const newPost =  {
       id: (Date.now() + Math.random())+'',
       title: postData.title,
@@ -35,18 +35,18 @@ export const postRepository = {
 //     }
 //     return false
 //   },
-//   updateVideo(id: IdVideoType, inputVideo: InputForUpdateVideoType): boolean {
-//     for (let index = 0; index < db.videos.length; index++) {
-//       const video = db.videos[index];
-//       if (video.id === id) {
-//         db.videos.splice(index, 1, {
-//           ...video,
-//           ...inputVideo,
-//           id
-//         })
-//         return true
-//       }
-//     }
-//     return false
-//   }
+updatePost(id: IdPostType, inputPost: CreateUpdatePostType): boolean {
+  for (let index = 0; index < db.posts.length; index++) {
+    const post = db.posts[index];
+    if (post.id === id) {
+      db.posts.splice(index, 1, {
+        ...post,
+        ...inputPost,
+        id
+      })
+      return true
+    }
+  }
+  return false
+  }
 }
