@@ -2,6 +2,7 @@ import { req } from './test-helpers'
 import { SETTINGS } from '../src/settings'
 import { db, setDB } from '../src/db/db'
 import { dataset1, createPost } from './dataset'
+import { CreatePostType } from '../src/types/posts-types'
 
 describe(SETTINGS.PATH.POSTS, () => {
   beforeAll(async () => {
@@ -33,76 +34,50 @@ describe(SETTINGS.PATH.POSTS, () => {
     expect(res.body.id).toBe(setId)
   })
 
-// // ---- POST --- //
-// it('should create', async () => {
-//   setDB()
-//   const newVideo: InputForCreateVideoType = {
-//     title: 'new video1',
-//     author: 'other',
-//     availableResolutions: [ResolutionsEnum.P144]
-//   }
+// ---- POST --- //
+it('should create post', async () => {
+  setDB()
+  const newPost: CreatePostType = {
+    title: 'new post',
+    blogId: '123',
+    content: 'bla bla bla bla bla',
+    shortDescription: '...short Description...'
+  }
 
-//   const res = await req
-//     .post(SETTINGS.PATH.VIDEOS)
-//     .send(newVideo)
-//     .expect(201)
+  const res = await req
+    .post(SETTINGS.PATH.POSTS)
+    .send(newPost)
+    .expect(201)
 
-//   expect(db.videos.length).toBe(1)
-//   expect(res.body.title).toEqual('new video1')
-//   expect(res.body.availableResolutions).toEqual(newVideo.availableResolutions)
-// })
+  expect(db.posts.length).toBe(1)
+  expect(res.body.title).toEqual('new post')
+  expect(res.body.content).toEqual(newPost.content)
+})
 
-// //
-// it('ERORR while video create in availableResolutions incorrect values', async () => {
-//   setDB()
-//   const newVideo: any = {
-//     title: 'new video1',
-//     author: 'other',
-//     availableResolutions: ['asd']
-//   }
+//
+it('ERORR invalid post title, shortDescription, content', async () => {
+  setDB()
+  const newPost: CreatePostType = {
+    title: 'length 31 symbols sssssssssssss',
+    blogId: '123',
+    content: 'length 101 symbols ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
+    shortDescription: 'length 101 symbols ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'
+  }
 
-//   const res = await req
-//     .post(SETTINGS.PATH.VIDEOS)
-//     .send(newVideo)
-//     .expect(400)
+  const res = await req
+    .post(SETTINGS.PATH.POSTS)
+    .send(newPost)
+    .expect(400)
 
-//   expect(res.body.errorsMessages.length).toBe(1)
-//   expect(res.body.errorsMessages[0].message).toEqual('incorrect values asd')
-// })
-// //
-// it('ERORR while video create max length title', async () => {
-//   setDB()
-//   const newVideo: InputForCreateVideoType = {
-//     title: 'new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new video1new',
-//     author: 'other',
-//     availableResolutions: [ResolutionsEnum.P144]
-//   }
+  expect(res.body.errorsMessages.length).toBe(3)
+  expect(res.body.errorsMessages[0].message).toEqual('max length is 30 letters')
+  expect(res.body.errorsMessages[0].field).toEqual('title')
+  expect(res.body.errorsMessages[1].message).toEqual('max length is 100 letters')
+  expect(res.body.errorsMessages[1].field).toEqual('shortDescription')
+  expect(res.body.errorsMessages[2].message).toEqual('max length is 1000 letters')
+  expect(res.body.errorsMessages[2].field).toEqual('content')
+})
 
-//   const res = await req
-//     .post(SETTINGS.PATH.VIDEOS)
-//     .send(newVideo) // отправка данных
-//     .expect(400)
-
-//   expect(res.body.errorsMessages.length).toBe(1)
-//   expect(res.body.errorsMessages[0].message).toEqual('video title max length = 40')
-// })
-// //
-// it('ERORR while video create max length author', async () => {
-//   setDB()
-//   const newVideo: InputForCreateVideoType = {
-//     title: 'new video1new',
-//     author: 'other otherotherotherotherotherotherotherotherotherotherotherotherother',
-//     availableResolutions: [ResolutionsEnum.P144]
-//   }
-
-//   const res = await req
-//     .post(SETTINGS.PATH.VIDEOS)
-//     .send(newVideo) // отправка данных
-//     .expect(400)
-
-//   expect(res.body.errorsMessages.length).toBe(1)
-//   expect(res.body.errorsMessages[0].message).toEqual('video author max length = 20')
-// })
 
 // // --- DELETE --- //
 // it('delete video by Id', async () => {

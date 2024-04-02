@@ -1,5 +1,5 @@
 import { PostType } from "../types/posts-types"
-import { OutputVideoType } from "../videos/types/videos-types"
+import { OutputVideoType } from "../types/videos-types"
 
 export type DBType = {
   videos: OutputVideoType[]

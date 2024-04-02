@@ -6,10 +6,8 @@ type IdPostType = string | null | undefined
 export const postRepository = {
   getVideos() {},
   findPostById(id: IdPostType): PostType | undefined {
-    console.log('findPostById', id)
     if (id) {
       const findPostById = db.posts.find((post) => post.id === id)
-      console.log('findPostById', findPostById)
       return findPostById
     } else {
       return undefined
@@ -25,7 +23,7 @@ export const postRepository = {
       blogName:	'string'
     }
 
-    db.posts  .push(newPost)
+    db.posts.push(newPost)
     return newPost
   },
 //   deleteVideo(id: IdVideoType): boolean {
