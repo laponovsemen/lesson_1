@@ -1,9 +1,10 @@
 import { req } from './test-helpers'
 import { SETTINGS } from '../src/settings'
 import { db, setDB } from '../src/db/db'
-import { dataset1, dataset2, video1 } from './dataset'
+import { dataset1, dataVideoSet2, video1 } from './dataset'
 import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
-import { InputForCreateVideoType } from '../src/videos/types/videos-types'
+import { InputForCreateVideoType } from '../src/types/videosTypes'
+
 
 describe('/videos', () => {
   beforeAll(async () => {
@@ -25,7 +26,7 @@ describe('/videos', () => {
     setDB();
     setDB(dataset1)
     const setId = 23
-    setDB(dataset2(setId))
+    setDB(dataVideoSet2(setId))
 
     const res = await req
       .get(`${SETTINGS.PATH.VIDEOS}/${setId}`)
@@ -112,7 +113,7 @@ it('delete video by Id', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId)
+  const dataWithVideoId = dataVideoSet2(setId)
   setDB(dataWithVideoId);
 
   await req
@@ -127,7 +128,7 @@ it('ERROR find by Id', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId)
+  const dataWithVideoId = dataVideoSet2(setId)
   setDB(dataWithVideoId);
 
   const res = await req
@@ -142,7 +143,7 @@ it('update video by Id', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId, 'title', 3)
+  const dataWithVideoId = dataVideoSet2(setId, 'title', 3)
   setDB(dataWithVideoId);
 
   const cangedTitle = 'my new title'
@@ -165,7 +166,7 @@ it('ERROR file type shoul be boolean', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId)
+  const dataWithVideoId = dataVideoSet2(setId)
   setDB(dataWithVideoId);
 
   const canBeDownloaded = 'string'
@@ -186,7 +187,7 @@ it('ERROR minAgeRestriction max 18', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId)
+  const dataWithVideoId = dataVideoSet2(setId)
   setDB(dataWithVideoId);
 
   const minAgeRestriction = 19
@@ -207,7 +208,7 @@ it('ERROR minAgeRestriction min 1', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId)
+  const dataWithVideoId = dataVideoSet2(setId)
   setDB(dataWithVideoId);
 
   const minAgeRestriction = 0
@@ -228,7 +229,7 @@ it('ERROR publicationDate is not date', async () => {
   setDB();
   setDB(dataset1);
   const setId = 23
-  const dataWithVideoId = dataset2(setId)
+  const dataWithVideoId = dataVideoSet2(setId)
   setDB(dataWithVideoId);
 
   const publicationDate = 1995

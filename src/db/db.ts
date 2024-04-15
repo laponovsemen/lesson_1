@@ -8,6 +8,7 @@ export type DBType = {
   blogs: BlogType[]
 }
 
+export const loginPassword = 'admin:qwerty'
 export const db: DBType = {
   videos: [],
   posts: [],

@@ -7,27 +7,34 @@ import { lengthValid, urlValid } from "../middlewares/validators"
 import { errorsValidation } from "../middlewares/errors-validation"
 import { deleteBlogController } from "../Blogs/controllers/deleteBlogController"
 import { updateBlogController } from "../Blogs/controllers/updateBlogController"
+import { authMiddleware } from "../middlewares/authValidation"
 
 export const blogsRouter = Router()
 
 blogsRouter.get('/', getBlogsController)
 blogsRouter.get('/:id', getBlogController)
-blogsRouter.delete('/:id', deleteBlogController)
+blogsRouter.delete(
+  '/:id',
+  authMiddleware,
+  deleteBlogController
+)
 blogsRouter.post(
   '/',
+  authMiddleware,
   check(['name', 'description', 'websiteUrl']),
-  lengthValid({title: 'name', max: 15}),
-  lengthValid({title: 'description', max: 500}),
-  lengthValid({title: 'websiteUrl', max: 100}),
+  lengthValid({ title: 'name', max: 15 }),
+  lengthValid({ title: 'description', max: 500 }),
+  lengthValid({ title: 'websiteUrl', max: 100 }),
   urlValid('websiteUrl'),
   errorsValidation,
   createBlogController)
 blogsRouter.put(
   '/:id',
+  authMiddleware,
   check(['name', 'description', 'websiteUrl']),
-  lengthValid({title: 'name', max: 15}),
-  lengthValid({title: 'description', max: 500}),
-  lengthValid({title: 'websiteUrl', max: 100}),
+  lengthValid({ title: 'name', max: 15 }),
+  lengthValid({ title: 'description', max: 500 }),
+  lengthValid({ title: 'websiteUrl', max: 100 }),
   urlValid('websiteUrl'),
   errorsValidation,
   updateBlogController
