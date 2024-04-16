@@ -5,9 +5,9 @@ import { dataset1, createPost } from './dataset'
 import { CreateUpdatePostType } from '../src/types/postsTypes'
 import { converStringIntoBase64 } from '../src/helpers/helpers'
 
-const invalidPost: CreateUpdatePostType = {
+const invalidPost: any = {
   title: 'length 31 symbols sssssssssssss',
-  blogId: '123',
+  blogId: 123,
   content: 'length 101 symbols ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
   shortDescription: 'length 101 symbols ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'
 }
@@ -65,10 +65,9 @@ describe(SETTINGS.PATH.POSTS, () => {
   })
 
   //
-  it('ERORR invalid post title, shortDescription, content', async () => {
+  it('ERORR invalid post title, shortDescription, content, blogId', async () => {
     setDB()
     const codedAuth = converStringIntoBase64(loginPassword)
-
 
     const res = await req
       .post(SETTINGS.PATH.POSTS)
@@ -76,13 +75,15 @@ describe(SETTINGS.PATH.POSTS, () => {
       .send(invalidPost)
       .expect(400)
 
-    expect(res.body.errorsMessages.length).toBe(3)
+    expect(res.body.errorsMessages.length).toBe(4)
     expect(res.body.errorsMessages[0].message).toEqual('max length is 30 letters')
     expect(res.body.errorsMessages[0].field).toEqual('title')
     expect(res.body.errorsMessages[1].message).toEqual('max length is 100 letters')
     expect(res.body.errorsMessages[1].field).toEqual('shortDescription')
     expect(res.body.errorsMessages[2].message).toEqual('max length is 1000 letters')
     expect(res.body.errorsMessages[2].field).toEqual('content')
+    expect(res.body.errorsMessages[3].message).toEqual('blogId must be string')
+    expect(res.body.errorsMessages[3].field).toEqual('blogId')
   })
 
 
@@ -173,12 +174,14 @@ describe(SETTINGS.PATH.POSTS, () => {
     const findedPost = db.posts.find((post) => post.id === setId)
     expect(db.posts.length).toBe(2)
     expect(res.statusCode).toEqual(400)
-    expect(res.body.errorsMessages.length).toBe(3)
+    expect(res.body.errorsMessages.length).toBe(4)
     expect(res.body.errorsMessages[0].message).toEqual('max length is 30 letters')
     expect(res.body.errorsMessages[0].field).toEqual('title')
     expect(res.body.errorsMessages[1].message).toEqual('max length is 100 letters')
     expect(res.body.errorsMessages[1].field).toEqual('shortDescription')
     expect(res.body.errorsMessages[2].message).toEqual('max length is 1000 letters')
     expect(res.body.errorsMessages[2].field).toEqual('content')
+    expect(res.body.errorsMessages[3].message).toEqual('blogId must be string')
+    expect(res.body.errorsMessages[3].field).toEqual('blogId')
   })
 })

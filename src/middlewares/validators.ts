@@ -1,4 +1,4 @@
-import { body, check } from "express-validator";
+import { ValidationChain, body } from "express-validator";
 
 type LengthValidType = {
   title: string,
@@ -6,7 +6,7 @@ type LengthValidType = {
   max?: number,
 }
 
-export const lengthValid = ({title, min, max}: LengthValidType) => (
+export const lengthValid = ({title, min, max}: LengthValidType): ValidationChain => (
   body(title)
     .trim()
     .notEmpty()
@@ -14,9 +14,16 @@ export const lengthValid = ({title, min, max}: LengthValidType) => (
     .withMessage((min ? `min length is ${min} letters` : '') + (max ? `max length is ${max} letters` : ''))
 )
 
-export const urlValid = (field: string) => (
+export const urlValid = (field: string): ValidationChain => (
   body(field)
     .trim()
     .matches('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
     .withMessage(('Invalid url'))
+)
+
+export const isString = (field: string): ValidationChain => (
+  body(field)
+    .isString()
+    .trim()
+    .withMessage((field + ' must be string'))
 )
