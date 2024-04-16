@@ -1,4 +1,3 @@
-import moment from 'moment';
 import {DBType} from '../src/db/db'
 import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
 import { PostType } from '../src/types/postsTypes';

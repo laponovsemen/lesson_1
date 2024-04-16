@@ -4,7 +4,7 @@ import { getPostController } from "../posts/controllers/getPostController"
 import { createPostController } from "../posts/controllers/createPostController"
 import { updatePostController } from "../posts/controllers/updatePostController"
 import { deletePostController } from "../posts/controllers/deletePostController"
-import { isString, lengthValid } from "../middlewares/validators"
+import { forBlogId, lengthValid } from "../middlewares/validators"
 import { errorsValidation } from "../middlewares/errors-validation"
 import { check } from "express-validator"
 import { authMiddleware } from "../middlewares/authValidation"
@@ -20,7 +20,7 @@ postsRouter.post(
   lengthValid({ title: 'title', max: 30 }),
   lengthValid({ title: 'shortDescription', max: 100 }),
   lengthValid({ title: 'content', max: 1000 }),
-  isString('blogId'),
+  forBlogId('blogId'),
   errorsValidation,
   createPostController)
   postsRouter.delete('/:id',
@@ -33,7 +33,7 @@ postsRouter.post(
     lengthValid({ title: 'title', max: 30 }),
     lengthValid({ title: 'shortDescription', max: 100 }),
     lengthValid({ title: 'content', max: 1000 }),
-    isString('blogId'),
+    forBlogId('blogId'),
   errorsValidation,
   updatePostController
 )

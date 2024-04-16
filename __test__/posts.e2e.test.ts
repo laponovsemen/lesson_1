@@ -44,10 +44,11 @@ describe(SETTINGS.PATH.POSTS, () => {
 
   // ---- POST --- //
   it('should create post', async () => {
-    setDB()
+    setDB(dataset1)
+    const blogId = db.blogs[0].id
     const newPost: CreateUpdatePostType = {
       title: 'new post',
-      blogId: '123',
+      blogId: blogId,
       content: 'bla bla bla bla bla',
       shortDescription: '...short Description...'
     }
@@ -59,7 +60,7 @@ describe(SETTINGS.PATH.POSTS, () => {
       .send(newPost)
       .expect(201)
 
-    expect(db.posts.length).toBe(1)
+    expect(db.posts.length).toBe(2)
     expect(res.body.title).toEqual('new post')
     expect(res.body.content).toEqual(newPost.content)
   })
@@ -84,6 +85,28 @@ describe(SETTINGS.PATH.POSTS, () => {
     expect(res.body.errorsMessages[2].field).toEqual('content')
     expect(res.body.errorsMessages[3].message).toEqual('blogId must be string')
     expect(res.body.errorsMessages[3].field).toEqual('blogId')
+  })
+
+  //
+  it('ERORR invalid post because blogId not found', async () => {
+    setDB(dataset1)
+    const newPost: CreateUpdatePostType = {
+      title: 'new post',
+      blogId: '093',
+      content: 'bla bla bla bla bla',
+      shortDescription: '...short Description...'
+    }
+    const codedAuth = converStringIntoBase64(loginPassword)
+
+    const res = await req
+      .post(SETTINGS.PATH.POSTS)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .send(newPost)
+      .expect(400)
+
+    expect(res.body.errorsMessages.length).toBe(1)
+    expect(res.body.errorsMessages[0].message).toEqual('blogId not found')
+    expect(res.body.errorsMessages[0].field).toEqual('blogId')
   })
 
 
@@ -126,10 +149,13 @@ describe(SETTINGS.PATH.POSTS, () => {
 
   // --- PUT --- //
   it('update post by Id', async () => {
-    setDB();
+    setDB()
+    setDB(dataset1)
+    const blogId = db.blogs[0].id
     const setId = '23'
     const post = {
       ...createPost(),
+      blogId,
       id: setId
     }
     setDB({ posts: [createPost(), post] });
