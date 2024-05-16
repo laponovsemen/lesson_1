@@ -1,5 +1,5 @@
 import { ValidationChain, body } from "express-validator";
-import { db } from "../db/db";
+import { dbLocal } from "../db/db";
 import { blogsRepository } from "../Blogs/repositories/blogsRepository";
 
 type LengthValidType = {
@@ -30,9 +30,9 @@ export const forBlogId = (field: string): ValidationChain => {
       if (typeof value !== 'string') {
         throw new Error(field + ' must be string');
       }
-      const findBlogById = blogsRepository.findBlogById(value)?.id
-      if (!findBlogById) {
-        throw new Error(field + ' not found');
-      }
+      // const findBlogById = blogsRepository.findBlogById(value)?.id
+      // if (!findBlogById) {
+      //   throw new Error(field + ' not found');
+      // }
     })
 }

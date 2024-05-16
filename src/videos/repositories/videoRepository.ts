@@ -1,5 +1,5 @@
 import moment from "moment"
-import { db } from "../../db/db"
+import { dbLocal } from "../../db/db"
 import { InputForCreateVideoType, InputForUpdateVideoType, OutputVideoType } from "../../types/videosTypes"
 
 type IdVideoType = number | null | undefined
@@ -8,7 +8,7 @@ export const videoRepository = {
   getVideos() {},
   findVideoById(id: IdVideoType): OutputVideoType | undefined {
     if (id) {
-      const findVideoById = db.videos.find((video) => video.id === id)
+      const findVideoById = dbLocal.videos.find((video) => video.id === id)
       return findVideoById
     } else {
       return undefined
@@ -26,23 +26,23 @@ export const videoRepository = {
       availableResolutions: videoData.availableResolutions,
     }
 
-    db.videos.push(newVideo)
+    dbLocal.videos.push(newVideo)
     return newVideo
   },
   deleteVideo(id: IdVideoType): boolean {
-    for (let index = 0; index < db.videos.length; index++) {
-      if (db.videos[index].id === id) {
-        db.videos.splice(index, 1);
+    for (let index = 0; index < dbLocal.videos.length; index++) {
+      if (dbLocal.videos[index].id === id) {
+        dbLocal.videos.splice(index, 1);
         return true
       }
     }
     return false
   },
   updateVideo(id: IdVideoType, inputVideo: InputForUpdateVideoType): boolean {
-    for (let index = 0; index < db.videos.length; index++) {
-      const video = db.videos[index];
+    for (let index = 0; index < dbLocal.videos.length; index++) {
+      const video = dbLocal.videos[index];
       if (video.id === id) {
-        db.videos.splice(index, 1, {
+        dbLocal.videos.splice(index, 1, {
           ...video,
           ...inputVideo,
           id

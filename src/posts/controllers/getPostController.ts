@@ -9,7 +9,8 @@ type ParamsType = {
 type ReqQueryType = string
 
 export const getPostController = (req: Request<ParamsType, any, ReqQueryType>, res: Response<PostType>) => {  
-  const findPost = postRepository.findPostById(req.params.id)
+  // const findPost = postRepository.findPostById(req.params.id)
+  const findPost = {} as PostType
 
   if (findPost) {
     res

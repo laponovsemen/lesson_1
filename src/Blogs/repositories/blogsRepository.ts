@@ -1,15 +1,15 @@
-import { db } from "../../db/db"
+import { dbLocal } from "../../db/db"
 import { BlogType, CreateUpdateBlogType } from "../../types/blogsType"
 
 type IdBlogsType = string | null | undefined
 
 export const blogsRepository = {
   getBlogs() {
-    return db.blogs
+    return dbLocal.blogs
   },
   findBlogById(id: IdBlogsType): BlogType | undefined {
     if (id) {
-      const findBlogById = db.blogs.find((blog) => blog.id === id)
+      const findBlogById = dbLocal.blogs.find((blog) => blog.id === id)
       return findBlogById
     } else {
       return undefined
@@ -23,23 +23,23 @@ export const blogsRepository = {
       websiteUrl: blogData.websiteUrl
     }
 
-    db.blogs.push(newBlog)
+    dbLocal.blogs.push(newBlog)
     return newBlog
   },
   deleteBlog(id: IdBlogsType): boolean {
-    for (let index = 0; index < db.blogs.length; index++) {
-      if (db.blogs[index].id === id) {
-        db.blogs.splice(index, 1);
+    for (let index = 0; index < dbLocal.blogs.length; index++) {
+      if (dbLocal.blogs[index].id === id) {
+        dbLocal.blogs.splice(index, 1);
         return true
       }
     }
     return false
   },
   updateBlog(id: IdBlogsType, inputBlog: CreateUpdateBlogType): boolean {
-    for (let index = 0; index < db.blogs.length; index++) {
-      const blog = db.blogs[index];
+    for (let index = 0; index < dbLocal.blogs.length; index++) {
+      const blog = dbLocal.blogs[index];
       if (blog.id === id) {
-        db.blogs.splice(index, 1, {
+        dbLocal.blogs.splice(index, 1, {
           ...blog,
           ...inputBlog,
           id
