@@ -8,14 +8,13 @@ type ParamsType = {
 
 type ReqQueryType = string
 
-export const getPostController = (req: Request<ParamsType, any, ReqQueryType>, res: Response<PostType>) => {  
-  // const findPost = postRepository.findPostById(req.params.id)
-  const findPost = {} as PostType
+export const getPostController = async (req: Request<ParamsType, any, ReqQueryType>, res: Response<PostType>) => {
+  const findedPost = await postRepository.findForOutput(req.params.id)
 
-  if (findPost) {
+  if (findedPost) {
     res
       .status(200)
-      .json(findPost)
+      .json(findedPost)
   } else {
     res
       .sendStatus(404)

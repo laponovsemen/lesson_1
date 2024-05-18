@@ -6,8 +6,8 @@ export type OutputVideoType = {
   author: string
   canBeDownloaded: boolean
   minAgeRestriction: number | null
-  createdAt: string // ? Date 
-  publicationDate: Date | string // ? Date
+  createdAt: string
+  publicationDate: Date | string
   availableResolutions: ResolutionsEnum[]
 }
 
@@ -23,7 +23,7 @@ export type OutputVideoType = {
   id: number
   canBeDownloaded?: boolean
   minAgeRestriction?: number | null
-  createdAt?: string // ? Date 
-  publicationDate?: string // ? Date
+  createdAt?: string
+  publicationDate?: string
   availableResolutions?: ResolutionsEnum[]
 }

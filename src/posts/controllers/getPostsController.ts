@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
-import { PostType } from '../../types/postsTypes'
 import { postRepository } from '../repositories/postRepository'
+import { PostType } from '../../types/postsTypes'
 
-export const getPostsController = (req: Request, res: Response<PostType[]>) => {
+export const getPostsController = async (req: Request, res: Response<PostType[]>) => {
+  const allPosts = await postRepository.getPosts()
   res
     .status(200)
-    .json(postRepository.getPosts())
+    .json(allPosts)
 }

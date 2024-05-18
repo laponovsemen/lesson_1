@@ -8,10 +8,10 @@ type ParamsType = {
 
 type ReqQueryType = string
 
-export const deletePostController = (req: Request<ParamsType, any, ReqQueryType>, res: Response<OutputVideoType>) => {
-  const isDeleted = postRepository.deletePost(req.params.id);
+export const deletePostController = async (req: Request<ParamsType, any, ReqQueryType>, res: Response<OutputVideoType>) => {
+  const isDeleted = await postRepository.deletePost(req.params.id);
 
-  if (isDeleted) {
+  if (isDeleted.isDeleted) {
     res
       .sendStatus(204)
   } else {

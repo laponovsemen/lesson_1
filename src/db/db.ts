@@ -1,8 +1,9 @@
 import { BlogType } from "../types/blogsType"
-import { PostDBType, PostType } from "../types/postsTypes"
+import { PostType } from "../types/postsTypes"
 import { OutputVideoType } from "../types/videosTypes"
 import { Collection, Db, MongoClient, ObjectId, ServerApiVersion  } from "mongodb"
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
+import { PostDBType } from "../types/db-types/postsTypes"
 
 
 export type DBType = {
@@ -33,7 +34,7 @@ export const setDB = (dataset?: Partial<DBType>) => {
 ////!
 dotenv.config()
 
-const mongoURL = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'
+const mongoURL = process.env.MONGO_URL
 const postCollectionName = process.env.POST_COLLECTION_NAME || 'mongodb://0.0.0.0:27017'
 let client: MongoClient = {} as MongoClient
 export let db: Db = {} as Db
@@ -41,6 +42,9 @@ export let db: Db = {} as Db
 export let postCollection: Collection<PostDBType> = {} as Collection<PostDBType>
 
 export const runDB = async () => {
+  if (!mongoURL) {
+    return new Error("! Url doesn't found")
+  }
   try {
     client = new MongoClient(mongoURL)
     db = client.db(process.env.DB_NAME)

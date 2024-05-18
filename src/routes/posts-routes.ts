@@ -11,8 +11,8 @@ import { authMiddleware } from "../middlewares/authValidation"
 
 export const postsRouter = Router()
 
-// postsRouter.get('/', getPostsController)
-// postsRouter.get('/:id', getPostController)
+postsRouter.get('/', getPostsController)
+postsRouter.get('/:id', getPostController)
 postsRouter.post(
   '/',
   authMiddleware,
@@ -23,17 +23,17 @@ postsRouter.post(
   forBlogId('blogId'),
   errorsValidation,
   createPostController)
-//   postsRouter.delete('/:id',
-//   authMiddleware,
-//   deletePostController)
-//   postsRouter.put(
-//     '/:id',
-//     authMiddleware,
-//     check(['title', 'shortDescription', 'content', 'blogId']),
-//     lengthValid({ title: 'title', max: 30 }),
-//     lengthValid({ title: 'shortDescription', max: 100 }),
-//     lengthValid({ title: 'content', max: 1000 }),
-//     forBlogId('blogId'),
-//   errorsValidation,
-//   updatePostController
-// )
+  postsRouter.delete('/:id',
+  authMiddleware,
+  deletePostController)
+  postsRouter.put(
+    '/:id',
+    authMiddleware,
+    check(['title', 'shortDescription', 'content', 'blogId']),
+    lengthValid({ title: 'title', max: 30 }),
+    lengthValid({ title: 'shortDescription', max: 100 }),
+    lengthValid({ title: 'content', max: 1000 }),
+    forBlogId('blogId'),
+  errorsValidation,
+  updatePostController
+)

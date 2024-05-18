@@ -1,90 +1,86 @@
 import { ObjectId } from "mongodb"
 import { dbLocal, postCollection } from "../../db/db"
-import { CreateUpdatePostType, PostDBType, PostType } from "../../types/postsTypes"
+import { InputPostType, PostType } from "../../types/postsTypes"
+import { PostDBType } from "../../types/db-types/postsTypes"
 
 type IdPostType = string | null | undefined
 
 export const postRepository = {
-  getPosts() {
-    return dbLocal.posts
+  async findPosts(): Promise<PostDBType[]> {
+    return await postCollection.find({}).toArray()
+  },
+  async findPost(postId: ObjectId): Promise<PostDBType | null> {
+    return await postCollection.findOne({_id: postId})
   },
 
-  async findPost(idPost: ObjectId): Promise<PostDBType | null> {
-    return await postCollection.findOne({_id: idPost})
+  
+
+  async getPosts(): Promise<PostType[]> {
+    const postsDB = await postCollection.find({}).toArray()
+    return postsDB.map((post) => this.mapToOutput(post))
   },
 
-  async findForOutput(idPost: ObjectId): Promise<PostType | null> {
-    const post = await postCollection.findOne({_id: idPost})
-    
+  async findForOutput(postId: string): Promise<PostType | null> {
+    postId
+    const post = await postCollection.findOne({_id: new ObjectId(postId)})
     return post ? this.mapToOutput(post) as PostType : null
   },
 
-  mapToOutput (post: PostDBType): any {
+  mapToOutput (post: PostDBType): PostType {
     return {
-      id: post._id,
+      id: post._id.toString(),
       title: post.title,
       shortDescription: post.shortDescription,
       content: post.content,
-      blogId: post.blogId,
-      blogName: post.blogName
+      blogId: post.blogId.toString(),
+      blogName: post.blogName,
+      createdAt: post.createdAt
     }
   },
 
-  // findPostById(id: IdPostType): PostType | undefined {
-  //   if (id) {
-  //     const findPostById = dbLocal.posts.find((post) => post.id === id)
-  //     return findPostById
-  //   } else {
-  //     return undefined
-  //   }
-  // },
-  // postData: CreateUpdatePostType
-  async createPost(postData: any): Promise<{error?: string, id?: ObjectId}> {
-    const newPost = { ...postData }
-    console.log('created newPost', newPost);
-    
+  async createPost(postData: InputPostType): Promise<{error?: string, id?: string}> {
+    // ?
+    const newPost = { ...postData } as any
+
     try {
       const insertedInfo = await postCollection.insertOne(newPost)
-      console.log('created insertedInfo', insertedInfo);
-      
-      return {id: new ObjectId(insertedInfo.insertedId)}
+
+      return {id: insertedInfo.insertedId.toString()}
     } catch (error) {
       console.log(error)
+
       return {error: 'error'}
     }
-    //   id: (Date.now() + Math.random()) + '',
-    //   title: postData.title,
-    //   shortDescription: postData.shortDescription,
-    //   content: postData.content,
-    //   blogId: postData.blogId,
-    //   blogName: 'string'
-    // }
-
-    // dbLocal.posts.push(newPost)
-    // return newPost
 
   },
-  deletePost(id: IdPostType): boolean {
-    for (let index = 0; index < dbLocal.posts.length; index++) {
-      if (dbLocal.posts[index].id === id) {
-        dbLocal.posts.splice(index, 1);
-        return true
-      }
+
+  async deletePost(id: string): Promise<{error?: string, isDeleted: boolean}> {
+    try {
+      await postCollection.deleteOne({_id: new ObjectId(id)})
+  
+      return { isDeleted: true }
+    } catch (error) {
+      // ? какие ошибки лучше выводить
+      console.log(error)
+
+      return {error: 'problem to delete', isDeleted: false}
     }
-    return false
   },
-  updatePost(id: IdPostType, inputPost: CreateUpdatePostType): boolean {
-    for (let index = 0; index < dbLocal.posts.length; index++) {
-      const post = dbLocal.posts[index];
-      if (post.id === id) {
-        dbLocal.posts.splice(index, 1, {
-          ...post,
-          ...inputPost,
-          id
-        })
-        return true
-      }
+
+  async updatePost(id: string, inputPost: InputPostType): Promise<{error?: string, isUpdate: boolean}> {
+    try {
+      // ? what fuck
+      const changedPost = { ...inputPost } as any
+      const insertedInfo = await postCollection.updateOne({
+        _id: new ObjectId(id)},
+        { $set: changedPost }
+      )
+
+      return { isUpdate: !!insertedInfo.modifiedCount }
+    } catch {
+      console.log(new Error('problem to update'));
+
+      return {error: 'problem to update', isUpdate: false}
     }
-    return false
   }
 }

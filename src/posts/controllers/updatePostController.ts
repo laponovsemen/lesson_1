@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { CreateUpdatePostType, PostType } from '../../types/postsTypes'
+import { InputPostType, PostType } from '../../types/postsTypes'
 import { postRepository } from '../repositories/postRepository'
 
 type ParamsType = {
@@ -7,9 +7,10 @@ type ParamsType = {
 }
 type ResBodyType = PostType
 
-export const updatePostController = (req: Request<ParamsType, any, CreateUpdatePostType>, res: Response<ResBodyType>) => {
-  const isUpdatePost = postRepository.updatePost(req.params.id, req.body)
-  if(isUpdatePost) {
+export const updatePostController = async (req: Request<ParamsType, any, InputPostType>, res: Response<ResBodyType>) => {
+  const isUpdatePost = await postRepository.updatePost(req.params.id, req.body)
+
+  if(isUpdatePost.isUpdate) {
     res
       .sendStatus(204)
   } else {
