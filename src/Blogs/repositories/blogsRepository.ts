@@ -1,9 +1,7 @@
 import { ObjectId } from "mongodb"
-import { blogCollection, dbLocal } from "../../db/db"
+import { blogCollection } from "../../db/db"
 import { BlogType, InputBlogType } from "../../types/blogsType"
 import { BlogDBType } from "../../types/db-types/blogsDBTypes"
-
-type IdBlogsType = string | null | undefined
 
 export const blogsRepository = {
   async getBlogs(): Promise<BlogType[]> {

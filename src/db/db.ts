@@ -1,7 +1,7 @@
 import { BlogType } from "../types/blogsType"
 import { PostType } from "../types/postsTypes"
 import { OutputVideoType } from "../types/videosTypes"
-import { Collection, Db, MongoClient, ObjectId, ServerApiVersion  } from "mongodb"
+import { Collection, Db, MongoClient } from "mongodb"
 import * as dotenv from 'dotenv'
 import { BlogDBType } from "../types/db-types/blogsDBTypes"
 import { PostDBType } from "../types/db-types/postsDBTypes"

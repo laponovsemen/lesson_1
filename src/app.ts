@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { setDB, runDB, blogCollection, postCollection } from './db/db'
+import { blogCollection, postCollection } from './db/db'
 import { SETTINGS } from './settings'
 import { postsRouter } from './routes/posts-routes'
 import { videosRouter } from './routes/videos-routes'
