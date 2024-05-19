@@ -13,7 +13,8 @@
     "watch": "tsc -w",
     "dev": "yarn nodemon --inspect dist/index.js",
     "jest": "jest -i",
-    "jest-posts": "jest -i __test__/posts.e2e.test.ts"
+    "jest-posts": "jest -i __test__/posts.e2e.test.ts",
+    "jest-blogs": "jest -i __test__/blogs.e2e.test.ts"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

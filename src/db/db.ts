@@ -3,6 +3,7 @@ import { PostType } from "../types/postsTypes"
 import { OutputVideoType } from "../types/videosTypes"
 import { Collection, Db, MongoClient, ObjectId, ServerApiVersion  } from "mongodb"
 import * as dotenv from 'dotenv'
+import { BlogDBType } from "../types/db-types/blogsDBTypes"
 import { PostDBType } from "../types/db-types/postsDBTypes"
 
 
@@ -36,10 +37,12 @@ dotenv.config()
 
 const mongoURL = process.env.MONGO_URL
 const postCollectionName = process.env.POST_COLLECTION_NAME || 'mongodb://0.0.0.0:27017'
+const blogCollectionName = process.env.BLOG_COLLECTION_NAME || 'mongodb://0.0.0.0:27017'
 let client: MongoClient = {} as MongoClient
 export let db: Db = {} as Db
 
 export let postCollection: Collection<PostDBType> = {} as Collection<PostDBType>
+export let blogCollection: Collection<BlogDBType> = {} as Collection<BlogDBType>
 
 export const runDB = async () => {
   if (!mongoURL) {
@@ -50,6 +53,7 @@ export const runDB = async () => {
     db = client.db(process.env.DB_NAME)
     
     postCollection = db.collection<PostDBType>(postCollectionName)
+    blogCollection = db.collection<BlogDBType>(blogCollectionName)
 
     await client.connect()
     console.log("Pinged your deployment. You successfully connected to MongoDB!")

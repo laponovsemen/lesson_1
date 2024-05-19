@@ -1,5 +1,7 @@
-import { dbLocal } from "../../db/db"
-import { BlogType, CreateUpdateBlogType } from "../../types/blogsType"
+import { ObjectId } from "mongodb"
+import { blogCollection, dbLocal } from "../../db/db"
+import { BlogType, InputBlogType } from "../../types/blogsType"
+import { BlogDBType } from "../../types/db-types/blogsDBTypes"
 
 type IdBlogsType = string | null | undefined
 
@@ -15,17 +17,35 @@ export const blogsRepository = {
       return undefined
     }
   },
-  createBlog(blogData: CreateUpdateBlogType): BlogType {
-    const newBlog = {
-      id: (Date.now() + Math.random()) + '',
+
+  async createBlog(blogData: InputBlogType): Promise<BlogType | null> {
+    const newBlog: BlogDBType = {
+      _id: new ObjectId(),
       name: blogData.name,
       description: blogData.description,
-      websiteUrl: blogData.websiteUrl
+      websiteUrl: blogData.websiteUrl,
+      createdAt: new Date(),
+      isMembership:	false
     }
+    const insertedInfo = await blogCollection.insertOne(newBlog)
 
-    dbLocal.blogs.push(newBlog)
-    return newBlog
+    if(insertedInfo.insertedId) {
+      return this.mapBlogToOutput(newBlog)
+    }
+    return null
   },
+
+  mapBlogToOutput(blogDb: BlogDBType): BlogType {
+    return {
+      id: blogDb._id.toString(),
+      name: blogDb.name,
+      description: blogDb.description,
+      websiteUrl: blogDb.websiteUrl,
+      createdAt: blogDb.createdAt,
+      isMembership:	blogDb.isMembership
+    }
+  },
+
   deleteBlog(id: IdBlogsType): boolean {
     for (let index = 0; index < dbLocal.blogs.length; index++) {
       if (dbLocal.blogs[index].id === id) {
@@ -35,7 +55,7 @@ export const blogsRepository = {
     }
     return false
   },
-  updateBlog(id: IdBlogsType, inputBlog: CreateUpdateBlogType): boolean {
+  updateBlog(id: IdBlogsType, inputBlog: InputBlogType): boolean {
     for (let index = 0; index < dbLocal.blogs.length; index++) {
       const blog = dbLocal.blogs[index];
       if (blog.id === id) {

@@ -3,9 +3,11 @@ export type BlogType = {
   name: string
   description: string
   websiteUrl: string
+  createdAt: Date
+  isMembership: boolean
 }
 
-export type CreateUpdateBlogType = {
+export type InputBlogType = {
   name: string
   description: string
   websiteUrl: string

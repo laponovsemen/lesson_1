@@ -39,7 +39,7 @@ export const createBlogs= (count: number): BlogDBType[] => {
       name: `name${ind+1}`,
       description:	`description${ind+1}`,
       websiteUrl:	`websiteUrl${ind+1}`,
-      isMembership:	true,
+      isMembership:	false,
       createdAt: new Date()
     })
   }
