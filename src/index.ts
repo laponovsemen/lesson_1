@@ -1,6 +1,6 @@
 import { app } from './app'
 import { SETTINGS } from './settings'
-import { postCollection, runDB } from './db/db'
+import { runDB } from './db/db'
 
 export const startApp = async () => {
     if(!await runDB()) process.exit(1)
