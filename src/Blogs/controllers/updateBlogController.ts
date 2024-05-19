@@ -7,8 +7,8 @@ type ParamsType = {
 }
 type ResBodyType = BlogType
 
-export const updateBlogController = (req: Request<ParamsType, any, InputBlogType>, res: Response<ResBodyType>) => {
-  const isUpdateBlog = blogsRepository.updateBlog(req.params.id, req.body)
+export const updateBlogController = async (req: Request<ParamsType, any, InputBlogType>, res: Response<ResBodyType>) => {
+  const isUpdateBlog = await blogsRepository.updateBlog(req.params.id, req.body)
   if(isUpdateBlog) {
     res
       .sendStatus(204)

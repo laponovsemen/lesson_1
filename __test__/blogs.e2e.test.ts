@@ -67,46 +67,45 @@ describe(SETTINGS.PATH.BLOGS, () => {
     expect(res.body.description).toEqual(newBlog.description)
   })
 //
-// //
-//   it('ERORR invalid length blog: name, description, websiteUrl', async () => {
-//     setDB()
+//
+  it('ERORR invalid length blog: name, description, websiteUrl', async () => {
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-//     const codedAuth = converStringIntoBase64(loginPassword)
+    const res = await req
+      .post(SETTINGS.PATH.BLOGS)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .send(invalidBlog)
+      .expect(400)
 
-//     const res = await req
-//       .post(SETTINGS.PATH.BLOGS)
-//       .set({ 'Authorization': 'Basic ' + codedAuth })
-//       .send(invalidBlog)
-//       .expect(400)
+    expect(res.body.errorsMessages.length).toBe(3)
+    expect(res.body.errorsMessages[0].message).toEqual('max length is 15 letters')
+    expect(res.body.errorsMessages[0].field).toEqual('name')
+    expect(res.body.errorsMessages[1].message).toEqual('max length is 500 letters')
+    expect(res.body.errorsMessages[1].field).toEqual('description')
+    expect(res.body.errorsMessages[2].message).toEqual('max length is 100 letters')
+    expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
+  })
 
-//     expect(res.body.errorsMessages.length).toBe(3)
-//     expect(res.body.errorsMessages[0].message).toEqual('max length is 15 letters')
-//     expect(res.body.errorsMessages[0].field).toEqual('name')
-//     expect(res.body.errorsMessages[1].message).toEqual('max length is 500 letters')
-//     expect(res.body.errorsMessages[1].field).toEqual('description')
-//     expect(res.body.errorsMessages[2].message).toEqual('max length is 100 letters')
-//     expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
-//   })
+  //
+  //
+  it('ERORR invalid URL blog: websiteUrl', async () => {
+    const newBlog = {
+      name: 'name',
+      description: '...description',
+      websiteUrl: 'www.leningrad.www.ru'
+    }
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-//   //
-//   it('ERORR invalid URL blog: websiteUrl', async () => {
-//     setDB()
-//     const newBlog = {
-//       name: 'name',
-//       description: '...description',
-//       websiteUrl: 'www.leningrad.www.ru'
-//     }
-//     const codedAuth = converStringIntoBase64(loginPassword)
-//     const res = await req
-//       .post(SETTINGS.PATH.BLOGS)
-//       .set({ 'Authorization': 'Basic ' + codedAuth })
-//       .send(newBlog)
-//       .expect(400)
+    const res = await req
+      .post(SETTINGS.PATH.BLOGS)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .send(newBlog)
+      .expect(400)
 
-//     expect(res.body.errorsMessages.length).toBe(1)
-//     expect(res.body.errorsMessages[0].message).toEqual('Invalid url')
-//     expect(res.body.errorsMessages[0].field).toEqual('websiteUrl')
-//   })
+    expect(res.body.errorsMessages.length).toBe(1)
+    expect(res.body.errorsMessages[0].message).toEqual('Invalid url')
+    expect(res.body.errorsMessages[0].field).toEqual('websiteUrl')
+  })
 
 //   // --- DELETE --- //
   it('delete blog by Id', async () => {
@@ -162,7 +161,8 @@ describe(SETTINGS.PATH.BLOGS, () => {
       .send(changedPost)
       .expect(204)
 
-    const findedPost = blogsDb.find((post) => post._id.toString() === setId)
+    const blogs = await blogCollection.find({}).toArray()
+    const findedPost = blogs.find((post) => post._id.toString() === setId)
 
     expect(blogsDb.length).toBe(2)
     expect(res.statusCode).toEqual(204)
@@ -172,55 +172,50 @@ describe(SETTINGS.PATH.BLOGS, () => {
   })
 
 
-//   it('Error invalid length update blog: name, description, websiteUrl', async () => {
-//     setDB();
-//     const setId = '23'
-//     const blog = {
-//       ...createBlog(),
-//       id: setId
-//     }
-//     setDB({ blogs: [createBlog(), blog] });
-//     const codedAuth = converStringIntoBase64(loginPassword)
+  it('Error invalid length update blog: name, description, websiteUrl', async () => {
+    await blogCollection.drop()
+    const blogsDb = createBlogs(2)
+    const setId = blogsDb[0]._id.toString()
+    await blogCollection.insertMany(blogsDb)
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-//     const res = await req
-//       .put(`${SETTINGS.PATH.BLOGS}/${setId}`)
-//       .set({ 'Authorization': 'Basic ' + codedAuth })
-//       .send(invalidBlog)
-//       .expect(400)
+    const res = await req
+      .put(`${SETTINGS.PATH.BLOGS}/${setId}`)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .send(invalidBlog)
+      .expect(400)
 
-//     expect(res.body.errorsMessages.length).toBe(3)
-//     expect(res.body.errorsMessages[0].message).toEqual('max length is 15 letters')
-//     expect(res.body.errorsMessages[0].field).toEqual('name')
-//     expect(res.body.errorsMessages[1].message).toEqual('max length is 500 letters')
-//     expect(res.body.errorsMessages[1].field).toEqual('description')
-//     expect(res.body.errorsMessages[2].message).toEqual('max length is 100 letters')
-//     expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
-//   })
+    expect(res.body.errorsMessages.length).toBe(3)
+    expect(res.body.errorsMessages[0].message).toEqual('max length is 15 letters')
+    expect(res.body.errorsMessages[0].field).toEqual('name')
+    expect(res.body.errorsMessages[1].message).toEqual('max length is 500 letters')
+    expect(res.body.errorsMessages[1].field).toEqual('description')
+    expect(res.body.errorsMessages[2].message).toEqual('max length is 100 letters')
+    expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
+  })
 
-//   //
-//   it('Error invalid update blog: websiteUrl', async () => {
-//     setDB();
-//     const setId = '23'
-//     const blog = {
-//       ...createBlog(),
-//       name: 'just name',
-//       id: setId
-//     }
-//     setDB({ blogs: [createBlog(), blog] });
-//     const codedAuth = converStringIntoBase64(loginPassword)
+  //
+  it('Error invalid update blog: websiteUrl', async () => {
+    await blogCollection.drop()
+    const blogsDb = createBlogs(2)
+    const chengedBlog = {
+      name: 'changed name',
+      description: blogsDb[0].description,
+      websiteUrl: 'www.leningrad.www.ru'
+    }
+    const setId = blogsDb[0]._id.toString()
+    await blogCollection.insertMany(blogsDb)
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-//     const chengedBlog = {
-//       ...blog,
-//       websiteUrl: 'www.leningrad.www.ru'
-//     }
-//     const res = await req
-//       .put(`${SETTINGS.PATH.BLOGS}/${setId}`)
-//       .set({ 'Authorization': 'Basic ' + codedAuth })
-//       .send(chengedBlog)
-//       .expect(400)
+    const res = await req
+      .put(`${SETTINGS.PATH.BLOGS}/${setId}`)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .send(chengedBlog)
+      .expect(400)
 
-//     expect(res.body.errorsMessages.length).toBe(1)
-//     expect(res.body.errorsMessages[0].message).toEqual('Invalid url')
-//     expect(res.body.errorsMessages[0].field).toEqual('websiteUrl')
-//   })
+    expect(res.body.errorsMessages.length).toBe(1)
+    expect(res.body.errorsMessages[0].message).toEqual('Invalid url')
+    expect(res.body.errorsMessages[0].field).toEqual('websiteUrl')
+  })
 })
+// ? Тесты не выключаются 

@@ -48,18 +48,9 @@ export const blogsRepository = {
     const deletedInfo = await blogCollection.deleteOne({_id: new ObjectId(id)})
     return !!deletedInfo.deletedCount
   },
-  updateBlog(id: IdBlogsType, inputBlog: InputBlogType): boolean {
-    for (let index = 0; index < dbLocal.blogs.length; index++) {
-      const blog = dbLocal.blogs[index];
-      if (blog.id === id) {
-        dbLocal.blogs.splice(index, 1, {
-          ...blog,
-          ...inputBlog,
-          id
-        })
-        return true
-      }
-    }
-    return false
+
+  async updateBlog(id: string, inputBlog: InputBlogType): Promise<boolean> {
+    const infoUdated = await blogCollection.updateOne({_id: new ObjectId(id)}, {$set: inputBlog})
+    return !!infoUdated.modifiedCount 
   }
 }
