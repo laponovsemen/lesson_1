@@ -1,11 +1,13 @@
 import { BlogType } from "../types/blogsType"
 import { PostType } from "../types/postsTypes"
 import { OutputVideoType } from "../types/videosTypes"
-import { Collection, Db, MongoClient } from "mongodb"
+import { Collection, Db, MongoClient, ObjectId, ServerApiVersion  } from "mongodb"
 import * as dotenv from 'dotenv'
 import { BlogDBType } from "../types/db-types/blogsDBTypes"
 import { PostDBType } from "../types/db-types/postsDBTypes"
 
+dotenv.config()
+export const loginPassword = 'admin:qwerty'
 
 export type DBType = {
   videos: OutputVideoType[]
@@ -13,8 +15,6 @@ export type DBType = {
   blogs: BlogType[]
 }
 
-
-export const loginPassword = 'admin:qwerty'
 export const dbLocal: DBType = {
   videos: [],
   posts: [],
@@ -33,8 +33,6 @@ export const setDB = (dataset?: Partial<DBType>) => {
   }
 }
 ////!
-dotenv.config()
-
 const mongoURL = process.env.MONGO_URL
 const postCollectionName = process.env.POST_COLLECTION_NAME || 'mongodb://0.0.0.0:27017'
 const blogCollectionName = process.env.BLOG_COLLECTION_NAME || 'mongodb://0.0.0.0:27017'
