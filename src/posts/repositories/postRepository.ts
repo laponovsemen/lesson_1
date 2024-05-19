@@ -1,9 +1,7 @@
 import { ObjectId } from "mongodb"
-import { dbLocal, postCollection } from "../../db/db"
+import { postCollection } from "../../db/db"
 import { InputPostType, PostType } from "../../types/postsTypes"
-import { PostDBType } from "../../types/db-types/postsTypes"
-
-type IdPostType = string | null | undefined
+import { PostDBType } from "../../types/db-types/postsDBTypes"
 
 export const postRepository = {
   async findPosts(): Promise<PostDBType[]> {

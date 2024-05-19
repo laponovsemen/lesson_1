@@ -1,9 +1,9 @@
 import {DBType} from '../src/db/db'
 import { ResolutionsEnum } from '../src/videos/enums/videos-enum'
 import { OutputVideoType } from '../src/types/videosTypes';
-import { BlogType } from '../src/types/blogsType';
 import { ObjectId } from 'mongodb';
-import { PostDBType } from '../src/types/db-types/postsTypes';
+import { PostDBType } from '../src/types/db-types/postsDBTypes';
+import { BlogDBType } from '../src/types/db-types/blogsDBTypes';
 
 export const video1= (id?: number, title?: string, canBeDownloaded?: any, minAgeRestriction?: number, publicationDate?: any): OutputVideoType => ({
   id: id ?? (Date.now() + Math.random()),
@@ -31,19 +31,26 @@ export const createPosts= (count: number): PostDBType[] => {
   }
   return arrCreatedPosts
 }
-
-export const createBlog= (): BlogType => ({
-  id: (Date.now() + Math.random())+'',
-  name: ('t' + Date.now() + Math.random()),
-  description:	'string',
-  websiteUrl:	'string'
-})
+export const createBlogs= (count: number): BlogDBType[] => {
+  const arrCreatedBlogs: BlogDBType[] = []
+  for (let ind = 0; ind < count; ind++) {
+    arrCreatedBlogs.push({
+      _id: new ObjectId(),
+      name: `name${ind+1}`,
+      description:	`description${ind+1}`,
+      websiteUrl:	`websiteUrl${ind+1}`,
+      isMembership:	true,
+      createdAt: new Date()
+    })
+  }
+  return arrCreatedBlogs
+}
 
 export const dataset1: DBType = {
   videos: [video1()],
   posts: [],
   // posts: [createPost()],
-  blogs: [createBlog()]
+  blogs: []
 }
 
 export const dataVideoSet2 = (setId: number, title?: string, minAgeRestriction?: number): DBType => {

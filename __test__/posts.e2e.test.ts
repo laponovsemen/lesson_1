@@ -136,19 +136,19 @@ describe(SETTINGS.PATH.POSTS, () => {
   })
   //
   //
-  // it('ERROR not delete by Id', async () => {
-  //   await postCollection.drop()
-  //   const createdPostsDB = createPosts(2)
-  //   await postCollection.insertMany(createdPostsDB);
-  //   const codedAuth = converStringIntoBase64(loginPassword)
+  it('ERROR not delete by Id', async () => {
+    await postCollection.drop()
+    const createdPostsDB = createPosts(2)
+    await postCollection.insertMany(createdPostsDB);
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-  //   const res = await req
-  //     .delete(`${SETTINGS.PATH.POSTS}/${'4052'}`)
-  //     .set({ 'Authorization': 'Basic ' + codedAuth })
-  //     .expect(404)
+    const res = await req
+      .delete(`${SETTINGS.PATH.POSTS}/${'4052'}`)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .expect(404)
 
-  //   expect(res.statusCode).toBe(404)
-  // })
+    expect(res.statusCode).toBe(404)
+  })
 
   // --- PUT --- //
   it('update post by Id', async () => {

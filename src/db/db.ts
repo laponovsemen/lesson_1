@@ -3,7 +3,7 @@ import { PostType } from "../types/postsTypes"
 import { OutputVideoType } from "../types/videosTypes"
 import { Collection, Db, MongoClient, ObjectId, ServerApiVersion  } from "mongodb"
 import * as dotenv from 'dotenv'
-import { PostDBType } from "../types/db-types/postsTypes"
+import { PostDBType } from "../types/db-types/postsDBTypes"
 
 
 export type DBType = {
