@@ -6,9 +6,12 @@ import { BlogDBType } from "../../types/db-types/blogsDBTypes"
 type IdBlogsType = string | null | undefined
 
 export const blogsRepository = {
-  getBlogs() {
-    return dbLocal.blogs
+  async getBlogs(): Promise<BlogType[]> {
+    const blogs = await blogCollection.find({}).toArray()
+
+    return blogs.map((blog) => this.mapBlogToOutput(blog))
   },
+
   findBlogById(id: IdBlogsType): BlogType | undefined {
     if (id) {
       const findBlogById = dbLocal.blogs.find((blog) => blog.id === id)

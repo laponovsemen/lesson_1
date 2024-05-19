@@ -7,6 +7,7 @@ type ResBodyType = BlogType | ErrorType
 
 export const createBlogController = async (req: Request<any, any, InputBlogType>, res: Response<ResBodyType>) => {
   const newBlog = await blogsRepository.createBlog(req.body)
+
   if (newBlog) {
     res
       .status(201)

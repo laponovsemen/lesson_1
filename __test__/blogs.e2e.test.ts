@@ -25,7 +25,6 @@ describe(SETTINGS.PATH.BLOGS, () => {
     const res = await req
       .get(SETTINGS.PATH.BLOGS)
       .expect(200)
-console.log(res.body);
 
     expect(res.body.length).toBe(2)
   })

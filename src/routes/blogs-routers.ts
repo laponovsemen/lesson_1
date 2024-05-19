@@ -11,7 +11,7 @@ import { authMiddleware } from "../middlewares/authValidation"
 
 export const blogsRouter = Router()
 
-// blogsRouter.get('/', getBlogsController)
+blogsRouter.get('/', getBlogsController)
 // blogsRouter.get('/:id', getBlogController)
 // blogsRouter.delete(
 //   '/:id',
