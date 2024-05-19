@@ -1,7 +1,7 @@
 import { req } from './test-helpers'
 import { SETTINGS } from '../src/settings'
-import { loginPassword, postCollection, runDB } from '../src/db/db'
-import { createPosts } from './dataset'
+import { blogCollection, loginPassword, postCollection, runDB } from '../src/db/db'
+import { createBlogs, createPosts } from './dataset'
 import { InputPostType, PostType } from '../src/types/postsTypes'
 import { converStringIntoBase64 } from '../src/helpers/helpers'
 import { postRepository } from '../src/posts/repositories/postRepository'
@@ -93,15 +93,25 @@ describe(SETTINGS.PATH.POSTS, () => {
     expect(res.body.errorsMessages[3].field).toEqual('blogId')
   })
 
-  // //
+  //
   // it('ERORR invalid post because blogId not found', async () => {
-  //   setDB(dataset1)
-  //   const newPost: CreateUpdatePostType = {
+  //   await postCollection.drop()
+  //   await blogCollection.drop()
+  //   const blogsDb = createBlogs(1)
+
+  //   const newPost: InputPostType = {
   //     title: 'new post',
-  //     blogId: '093',
+  //     blogId: '555a5555f55fb5c5c5cb5a5b',
   //     content: 'bla bla bla bla bla',
   //     shortDescription: '...short Description...'
   //   }
+  //   // setDB(dataset1)
+  //   // const newPost: CreateUpdatePostType = {
+  //   //   title: 'new post',
+  //   //   blogId: '093',
+  //   //   content: 'bla bla bla bla bla',
+  //   //   shortDescription: '...short Description...'
+  //   // }
   //   const codedAuth = converStringIntoBase64(loginPassword)
 
   //   const res = await req
@@ -183,12 +193,6 @@ describe(SETTINGS.PATH.POSTS, () => {
   it('Error update post by Id', async () => {
     await postCollection.drop()
     const createdPostsDB = createPosts(2)
-    const changedPost = {
-      title: 'changed post',
-      blogId: createdPostsDB[0].blogId.toString(),
-      content: createdPostsDB[0].content,
-      shortDescription: '...short Description...'
-    }
     await postCollection.insertMany(createdPostsDB);
     const setId = createdPostsDB[0]?._id.toString()
 
