@@ -121,59 +121,55 @@ describe(SETTINGS.PATH.BLOGS, () => {
       .set({ 'Authorization': 'Basic ' + codedAuth })
       .expect(204)
 
-    expect(blogsDb.length).toBe(1)
-    expect(blogsDb[0]._id.toString()).not.toBe(setId)
+    const blogs = await blogCollection.find({}).toArray()
+    expect(blogs.length).toBe(1)
+    expect(blogs[0]._id.toString()).not.toBe(setId)
   })
 //
-//   //
-//   it('ERROR not delete by Id', async () => {
-//     setDB();
-//     const setId = '23'
-//     const blog = {
-//       ...createBlog(),
-//       id: setId
-//     }
-//     setDB({ blogs: [createBlog(), blog] });
-//     const codedAuth = converStringIntoBase64(loginPassword)
+//
+  it('ERROR not delete by Id', async () => {
+    await blogCollection.drop()
+    const blogsDb = createBlogs(2)
+    await blogCollection.insertMany(blogsDb)
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-//     const res = await req
-//       .delete(`${SETTINGS.PATH.BLOGS}/${4052}`)
-//       .set({ 'Authorization': 'Basic ' + codedAuth })
-//       .expect(404)
+    const res = await req
+      // .delete(`${SETTINGS.PATH.BLOGS}/${4052}`) 
+      // ? как обработать ошибку случайной строки вместо ObjectId
+      .delete(`${SETTINGS.PATH.BLOGS}/111a01f1cfa1108111d01a0a`)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .expect(404)
 
-//     expect(res.statusCode).toBe(404)
-//   })
+    expect(res.statusCode).toBe(404)
+  })
 
-//   // --- PUT --- //
-//   it('update blog by Id', async () => {
-//     setDB();
-//     const setId = '23'
-//     const blog = {
-//       ...createBlog(),
-//       id: setId
-//     }
-//     setDB({ blogs: [createBlog(), blog] });
+  // --- PUT --- //
+  it('update blog by Id', async () => {
+    await blogCollection.drop()
+    const blogsDb = createBlogs(2)
+    const changedPost: InputBlogType = {
+      name: 'changed name',
+      description: blogsDb[0].description,
+      websiteUrl: 'https://www.leningrad.com'
+    }
+    const setId = blogsDb[0]._id.toString()
+    await blogCollection.insertMany(blogsDb)
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-//     const cangedName = 'changed name'
-//     const changedPost: CreateUpdateBlogType = {
-//       name: cangedName,
-//       description: '...Description...',
-//       websiteUrl: 'https://www.leningrad.com'
-//     }
-//     const codedAuth = converStringIntoBase64(loginPassword)
+    const res = await req
+      .put(`${SETTINGS.PATH.BLOGS}/${setId}`)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .send(changedPost)
+      .expect(204)
 
-//     const res = await req
-//       .put(`${SETTINGS.PATH.BLOGS}/${setId}`)
-//       .set({ 'Authorization': 'Basic ' + codedAuth })
-//       .send(changedPost)
-//       .expect(204)
+    const findedPost = blogsDb.find((post) => post._id.toString() === setId)
 
-//     const findedPost = db.blogs.find((post) => post.id === setId)
-//     expect(db.blogs.length).toBe(2)
-//     expect(res.statusCode).toEqual(204)
-//     expect(findedPost?.name).toEqual(cangedName)
-//     expect(findedPost?.id).toEqual(setId)
-//   })
+    expect(blogsDb.length).toBe(2)
+    expect(res.statusCode).toEqual(204)
+    expect(findedPost?.name).toEqual('changed name')
+    expect(findedPost?.description).toEqual(blogsDb[0].description)
+
+  })
 
 
 //   it('Error invalid length update blog: name, description, websiteUrl', async () => {

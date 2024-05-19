@@ -28,14 +28,14 @@ blogsRouter.post(
   urlValid('websiteUrl'),
   errorsValidation,
   createBlogController)
-// blogsRouter.put(
-//   '/:id',
-//   authMiddleware,
-//   check(['name', 'description', 'websiteUrl']),
-//   lengthValid({ title: 'name', max: 15 }),
-//   lengthValid({ title: 'description', max: 500 }),
-//   lengthValid({ title: 'websiteUrl', max: 100 }),
-//   urlValid('websiteUrl'),
-//   errorsValidation,
-//   updateBlogController
-// )
+blogsRouter.put(
+  '/:id',
+  authMiddleware,
+  check(['name', 'description', 'websiteUrl']),
+  lengthValid({ title: 'name', max: 15 }),
+  lengthValid({ title: 'description', max: 500 }),
+  lengthValid({ title: 'websiteUrl', max: 100 }),
+  urlValid('websiteUrl'),
+  errorsValidation,
+  updateBlogController
+)

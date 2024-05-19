@@ -44,14 +44,9 @@ export const blogsRepository = {
     }
   },
 
-  deleteBlog(id: IdBlogsType): boolean {
-    for (let index = 0; index < dbLocal.blogs.length; index++) {
-      if (dbLocal.blogs[index].id === id) {
-        dbLocal.blogs.splice(index, 1);
-        return true
-      }
-    }
-    return false
+  async deleteBlog(id: string): Promise<boolean> {
+    const deletedInfo = await blogCollection.deleteOne({_id: new ObjectId(id)})
+    return !!deletedInfo.deletedCount
   },
   updateBlog(id: IdBlogsType, inputBlog: InputBlogType): boolean {
     for (let index = 0; index < dbLocal.blogs.length; index++) {
