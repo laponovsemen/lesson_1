@@ -39,7 +39,7 @@ describe(SETTINGS.PATH.POSTS, () => {
   it('get by id /post/id', async () => {
     await postCollection.drop()
     const createdPostsDB = createPosts(2)
-    await postCollection.insertMany(createdPostsDB);
+    await postCollection.insertMany(createdPostsDB)
     const setId = createdPostsDB[0]?._id.toString()
     
     const res = await req

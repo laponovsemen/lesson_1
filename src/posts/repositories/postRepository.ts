@@ -19,7 +19,6 @@ export const postRepository = {
   },
 
   async findForOutput(postId: string): Promise<PostType | null> {
-    postId
     const post = await postCollection.findOne({_id: new ObjectId(postId)})
     return post ? this.mapToOutput(post) as PostType : null
   },

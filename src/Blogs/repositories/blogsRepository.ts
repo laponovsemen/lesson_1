@@ -8,17 +8,12 @@ type IdBlogsType = string | null | undefined
 export const blogsRepository = {
   async getBlogs(): Promise<BlogType[]> {
     const blogs = await blogCollection.find({}).toArray()
-
     return blogs.map((blog) => this.mapBlogToOutput(blog))
   },
 
-  findBlogById(id: IdBlogsType): BlogType | undefined {
-    if (id) {
-      const findBlogById = dbLocal.blogs.find((blog) => blog.id === id)
-      return findBlogById
-    } else {
-      return undefined
-    }
+  async findBlogById(id: string): Promise<BlogType | null> {
+    const findedBlog = await blogCollection.findOne({_id: new ObjectId(id)})
+    return findedBlog ? this.mapBlogToOutput(findedBlog) : null
   },
 
   async createBlog(blogData: InputBlogType): Promise<BlogType | null> {

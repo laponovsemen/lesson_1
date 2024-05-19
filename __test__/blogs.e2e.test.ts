@@ -30,19 +30,19 @@ describe(SETTINGS.PATH.BLOGS, () => {
   })
   //  
   //
-//   it('get by id /blogs/id', async () => {
-//     const blog1 = createBlog()
-//     const setId = '23'
-//     const blog2 = { ...createBlog(), id: setId }
-//     setDB({ blogs: [blog1, blog2] })
+  it('get by id /blogs/id', async () => {
+    await blogCollection.drop()
+    const blogsDb = createBlogs(2)
+    const setId = blogsDb[0]._id.toString()
+    await blogCollection.insertMany(blogsDb)
+    // ? Обязательно дропать базу перед каждым тестом
 
-//     const res = await req
-//       .get(`${SETTINGS.PATH.BLOGS}/${setId}`)
-//       .expect(200)
+    const res = await req
+      .get(`${SETTINGS.PATH.BLOGS}/${setId}`)
+      .expect(200)
 
-//     expect(db.blogs.length).toBe(2)
-//     expect(res.body.id).toBe(setId)
-//   })
+    expect(res.body.id).toBe(setId)
+  })
 
   // ---- POST --- //
   it('should create blog', async () => {
@@ -66,7 +66,7 @@ describe(SETTINGS.PATH.BLOGS, () => {
     expect(res.body.name).toEqual('new blog')
     expect(res.body.description).toEqual(newBlog.description)
   })
-
+//
 // //
 //   it('ERORR invalid length blog: name, description, websiteUrl', async () => {
 //     setDB()
@@ -109,25 +109,22 @@ describe(SETTINGS.PATH.BLOGS, () => {
 //   })
 
 //   // --- DELETE --- //
-//   it('delete blog by Id', async () => {
-//     setDB();
-//     const setId = '23'
-//     const blog = {
-//       ...createBlog(),
-//       id: setId
-//     }
-//     setDB({ blogs: [createBlog(), blog] });
-//     const codedAuth = converStringIntoBase64(loginPassword)
+  it('delete blog by Id', async () => {
+    await blogCollection.drop()
+    const blogsDb = createBlogs(2)
+    const setId = blogsDb[0]._id.toString()
+    await blogCollection.insertMany(blogsDb)
+    const codedAuth = converStringIntoBase64(loginPassword)
 
-//     await req
-//       .delete(`${SETTINGS.PATH.BLOGS}/${setId}`)
-//       .set({ 'Authorization': 'Basic ' + codedAuth })
-//       .expect(204)
+    await req
+      .delete(`${SETTINGS.PATH.BLOGS}/${setId}`)
+      .set({ 'Authorization': 'Basic ' + codedAuth })
+      .expect(204)
 
-//     expect(db.blogs.length).toBe(1)
-//     expect(db.blogs[0].id).not.toBe(setId)
-//   })
-
+    expect(blogsDb.length).toBe(1)
+    expect(blogsDb[0]._id.toString()).not.toBe(setId)
+  })
+//
 //   //
 //   it('ERROR not delete by Id', async () => {
 //     setDB();

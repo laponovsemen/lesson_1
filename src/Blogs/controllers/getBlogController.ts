@@ -8,8 +8,8 @@ type ParamsType = {
 
 type ReqQueryType = string
 
-export const getBlogController = (req: Request<ParamsType, any, ReqQueryType>, res: Response<BlogType>) => {  
-  const findBlog = blogsRepository.findBlogById(req.params.id)
+export const getBlogController = async (req: Request<ParamsType, any, ReqQueryType>, res: Response<BlogType>) => {  
+  const findBlog = await blogsRepository.findBlogById(req.params.id)
 
   if (findBlog) {
     res
