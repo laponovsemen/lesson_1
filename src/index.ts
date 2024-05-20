@@ -1,9 +1,12 @@
-import { app } from './app'
+import  app  from './app'
 import { SETTINGS } from './settings'
 import { runDB } from './db/db'
 
 export const startApp = async () => {
-    if(!await runDB()) process.exit(1)
+    if(!await runDB()) {
+        console.error("no db connection")
+        process.exit(1)
+    }
     app.listen(SETTINGS.PORT, async() => {
         // ВСЕ Только title 
         // console.log((await postCollection.find({},{projection: {title:1, _id:0}}).toArray()) as {title:string}[])
