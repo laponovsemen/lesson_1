@@ -49,16 +49,16 @@ export const runDB = async () => {
   try {
     client = new MongoClient(mongoURL)
     db = client.db(process.env.DB_NAME)
-    
+
     postCollection = db.collection<PostDBType>(postCollectionName)
     blogCollection = db.collection<BlogDBType>(blogCollectionName)
 
     await client.connect()
-    console.log("Pinged your deployment. You successfully connected to MongoDB!")
+    console.error("Pinged your deployment. You successfully connected to MongoDB!")
     return true
   } catch (e) {
     // Ensures that the client will close when you finish/error
-    console.log(e)
+    console.error(e)
     await client.close()
     return false
   }
